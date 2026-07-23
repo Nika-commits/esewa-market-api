@@ -1,4 +1,5 @@
 using esewa_market.Data.Entities;
+using esewa_market.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -12,5 +13,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Product>().ComplexCollection(p => p.Colors, p => p.ToJson());
     }
 }

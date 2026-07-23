@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using esewa_market.Data;
@@ -11,9 +12,11 @@ using esewa_market.Data;
 namespace esewa_market.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260717094836_changed to collections")]
+    partial class changedtocollections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,9 +69,8 @@ namespace esewa_market.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
-                    b.PrimitiveCollection<List<string>>("Sizes")
-                        .IsRequired()
-                        .HasColumnType("text[]");
+                    b.PrimitiveCollection<int[]>("Sizes")
+                        .HasColumnType("integer[]");
 
                     b.Property<string>("Status")
                         .HasColumnType("text");

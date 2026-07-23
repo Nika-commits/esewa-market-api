@@ -24,8 +24,8 @@ public class Product
     public string? Description { get; set; }
     public string? Brand { get; set; }
 
-    public required List<Color> Colors { get; set; }
-    public List< Size>? Sizes { get; set; }
+    public required List<Color> Colors { get; set; } = [];
+    public List< string> Sizes { get; set; }
 
 
 }

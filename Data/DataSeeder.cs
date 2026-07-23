@@ -24,7 +24,19 @@ public static class DataSeeder
                 Id = 1,
                 Name = "50 T-Shirt",
                 Price = 100,
-                Description = "Product 1 Description",
+                Description = """
+                              <h3>Product Details</h3>
+                              <p>A comfortable everyday t-shirt made from soft cotton fabric. Designed for casual wear with a modern fit.</p>
+
+                              <ul>
+                                  <li><strong>Material:</strong> 100% Cotton</li>
+                                  <li><strong>Fit:</strong> Regular Fit</li>
+                                  <li><strong>Neck:</strong> Crew Neck</li>
+                                  <li><strong>Care:</strong> Machine Wash</li>
+                              </ul>
+
+                              <p>Perfect for daily wear, travel, and casual outings.</p>
+                              """,
                 Brand = "Brand 1",
                 Status = "In-Stock" ,
                 ImageUrls =
@@ -47,6 +59,11 @@ public static class DataSeeder
                     new("Brown", "#A52A2A"),
                     new("Black", "#000000"),
                     new("White", "#FFFFFF")
+                ],
+                Sizes = [
+                    "L",
+                    "XL",
+                    "XXL"
                 ]
 
             },
@@ -55,7 +72,19 @@ public static class DataSeeder
                 Id = 2,
                 Name = "Nike Air Monarch",
                 Price = 200,
-                Description = "Product 2 Description",
+                Description = """
+                              <h3>Product Details</h3>
+                              <p>The Nike Air Monarch delivers excellent comfort and cushioning for everyday walking and training.</p>
+
+                              <ul>
+                                  <li><strong>Upper:</strong> Synthetic Leather</li>
+                                  <li><strong>Sole:</strong> Durable Rubber</li>
+                                  <li><strong>Support:</strong> Air Cushioning</li>
+                                  <li><strong>Closure:</strong> Lace-Up</li>
+                              </ul>
+
+                              <p>Built for all-day comfort with reliable grip and support.</p>
+                              """,
                 Brand ="Brand 2" ,
                 Status = "Out-of-Stock",
                 ImageUrls =
@@ -75,6 +104,11 @@ public static class DataSeeder
                     new("Brown", "#A52A2A"),
                     new("Black", "#000000"),
                     new("White", "#FFFFFF")
+                ],
+                Sizes = [
+                    "L",
+                    "XL",
+                    "XXL"
                 ]
             },
             new()
@@ -82,7 +116,19 @@ public static class DataSeeder
                 Id = 3,
                 Name = "Dell Latitude 14",
                 Price = 8200,
-                Description = "Product 3 Description",
+                Description = """
+                              <h3>Product Details</h3>
+                              <p>A reliable business laptop designed for productivity, multitasking, and professional workloads.</p>
+
+                              <ul>
+                                  <li><strong>Display:</strong> 14-inch Full HD</li>
+                                  <li><strong>Processor:</strong> Intel Core Series</li>
+                                  <li><strong>Storage:</strong> SSD</li>
+                                  <li><strong>Ideal For:</strong> Office, Study, and Development</li>
+                              </ul>
+
+                              <p>Lightweight, durable, and suitable for everyday computing.</p>
+                              """,
                 Brand ="Brand 3",
                 Status = "In-Stock",
                 ImageUrls =
@@ -104,9 +150,9 @@ public static class DataSeeder
                     new("White", "#FFFFFF")
                 ],
                 Sizes = [
-                Size.L,
-                Size.M,
-                Size.Xl
+                    "L",
+                    "XL",
+                    "XXL"
                 ]
 
             },
@@ -115,7 +161,19 @@ public static class DataSeeder
                 Id = 4,
                 Name = "Green Premium Hoodies",
                 Price = 1200,
-                Description = "Product 4 " +"Description",
+                Description = """
+                              <h3>Product Details</h3>
+                              <p>Stay warm with this premium hoodie crafted from soft fleece fabric for maximum comfort.</p>
+
+                              <ul>
+                                  <li><strong>Material:</strong> Cotton Blend</li>
+                                  <li><strong>Fit:</strong> Relaxed Fit</li>
+                                  <li><strong>Features:</strong> Hood with Drawstrings</li>
+                                  <li><strong>Pocket:</strong> Front Kangaroo Pocket</li>
+                              </ul>
+
+                              <p>Perfect for cool weather and everyday casual outfits.</p>
+                              """,
                 Brand ="Brand 4" ,
                 Status = "Out-of-Stock",
                 ImageUrls =
@@ -136,9 +194,9 @@ public static class DataSeeder
                     new("White", "#FFFFFF")
                 ],
                 Sizes = [
-                    Size.L,
-                    Size.M,
-                    Size.Xl
+                    "L",
+                    "XL",
+                    "XXL"
                 ]
             },
 
@@ -147,7 +205,19 @@ public static class DataSeeder
                 Id = 5,
                 Name = "Translucent Shirt",
                 Price = 500,
-                Description = "Product 5 Description",
+                Description = """
+                              <h3>Product Details</h3>
+                              <p>A stylish translucent shirt featuring a lightweight fabric and contemporary design for a standout look.</p>
+
+                              <ul>
+                                  <li><strong>Material:</strong> Lightweight Polyester Blend</li>
+                                  <li><strong>Fit:</strong> Oversized</li>
+                                  <li><strong>Sleeves:</strong> Long Sleeve</li>
+                                  <li><strong>Style:</strong> Modern Casual</li>
+                              </ul>
+
+                              <p>Ideal for layering and creating fashionable streetwear outfits.</p>
+                              """,
                 Brand ="Brand 5" ,
                 Status = "In-Stock",
                 ImageUrls =
@@ -170,9 +240,9 @@ public static class DataSeeder
                     new("White", "#FFFFFF")
                 ],
                 Sizes = [
-                    Size.L,
-                    Size.M,
-                    Size.Xl
+                    "L",
+                    "XL",
+                    "XXL"
                 ]
             },
             };

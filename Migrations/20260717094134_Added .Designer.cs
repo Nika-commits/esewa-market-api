@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using esewa_market.Data;
@@ -11,9 +12,11 @@ using esewa_market.Data;
 namespace esewa_market.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260717094134_Added ")]
+    partial class Added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,22 +69,17 @@ namespace esewa_market.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
-                    b.PrimitiveCollection<List<string>>("Sizes")
-                        .IsRequired()
-                        .HasColumnType("text[]");
+                    b.PrimitiveCollection<int[]>("Sizes")
+                        .HasColumnType("integer[]");
 
                     b.Property<string>("Status")
                         .HasColumnType("text");
 
-                    b.ComplexCollection(typeof(List<Dictionary<string, object>>), "Colors", "esewa_market.Data.Entities.Product.Colors#Color", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Colors", "esewa_market.Data.Entities.Product.Colors#List<Color>", b1 =>
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("HexCode")
-                                .IsRequired();
-
-                            b1.Property<string>("Name")
-                                .IsRequired();
+                            b1.Property<int>("Capacity");
 
                             b1
                                 .ToJson("Colors")
