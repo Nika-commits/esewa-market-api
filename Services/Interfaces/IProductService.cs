@@ -4,6 +4,6 @@ namespace esewa_market.Services.Interfaces;
 
 public interface IProductService
 {
-    Task<List<Product>> GetFeaturedProducts();
+    Task<List<Product>> GetFeaturedProducts(string? category);
     Task<Product?> GetProductById(int id);
 }

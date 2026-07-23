@@ -61,7 +61,8 @@ public static class DataSeeder
                     "L",
                     "XL",
                     "XXL"
-                ]
+                ],
+                IsFeatured = true
 
             },
             new()
@@ -103,7 +104,8 @@ public static class DataSeeder
                     "L",
                     "XL",
                     "XXL"
-                ]
+                ],
+                IsFeatured = true
             },
             new()
             {
@@ -144,7 +146,8 @@ public static class DataSeeder
                     "L",
                     "XL",
                     "XXL"
-                ]
+                ],
+                IsFeatured = true
 
             },
             new()

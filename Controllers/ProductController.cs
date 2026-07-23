@@ -11,12 +11,13 @@ public class ProductController(
     ) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<Product>>> GetFeaturedProducts()
+    public async Task<ActionResult<List<Product>>> GetFeaturedProducts([FromQuery] string? category)
     {
-        return Ok(await productService.GetFeaturedProducts());
+        return Ok(await productService.GetFeaturedProducts(category));
     }
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Product?>> GetProductById([FromRoute] int id)
+    public async Task<ActionResult<Product?>> GetProductById(
+        [FromRoute] int id)
     {
         return Ok(await productService.GetProductById(id));
     }

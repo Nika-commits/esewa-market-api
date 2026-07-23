@@ -27,5 +27,7 @@ public class Product
     public required List<Color> Colors { get; set; } = [];
     public List< string> Sizes { get; set; }
 
+    public bool IsFeatured { get; set; } = false;
+
 
 }
