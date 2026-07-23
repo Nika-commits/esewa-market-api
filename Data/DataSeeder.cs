@@ -25,11 +25,8 @@ public static class DataSeeder
                 Name = "50 T-Shirt",
                 Price = 100,
                 Description = """
-                              <h3>Product Details</h3>
-                              <p>A comfortable everyday t-shirt made from soft cotton fabric. Designed for casual wear with a modern fit.</p>
-
                               <ul>
-                                  <li><strong>Material:</strong> 100% Cotton</li>
+                                  <li><strong>✅</strong> 100% Cotton</li>
                                   <li><strong>Fit:</strong> Regular Fit</li>
                                   <li><strong>Neck:</strong> Crew Neck</li>
                                   <li><strong>Care:</strong> Machine Wash</li>
@@ -73,9 +70,6 @@ public static class DataSeeder
                 Name = "Nike Air Monarch",
                 Price = 200,
                 Description = """
-                              <h3>Product Details</h3>
-                              <p>The Nike Air Monarch delivers excellent comfort and cushioning for everyday walking and training.</p>
-
                               <ul>
                                   <li><strong>Upper:</strong> Synthetic Leather</li>
                                   <li><strong>Sole:</strong> Durable Rubber</li>
@@ -117,9 +111,6 @@ public static class DataSeeder
                 Name = "Dell Latitude 14",
                 Price = 8200,
                 Description = """
-                              <h3>Product Details</h3>
-                              <p>A reliable business laptop designed for productivity, multitasking, and professional workloads.</p>
-
                               <ul>
                                   <li><strong>Display:</strong> 14-inch Full HD</li>
                                   <li><strong>Processor:</strong> Intel Core Series</li>
@@ -162,9 +153,6 @@ public static class DataSeeder
                 Name = "Green Premium Hoodies",
                 Price = 1200,
                 Description = """
-                              <h3>Product Details</h3>
-                              <p>Stay warm with this premium hoodie crafted from soft fleece fabric for maximum comfort.</p>
-
                               <ul>
                                   <li><strong>Material:</strong> Cotton Blend</li>
                                   <li><strong>Fit:</strong> Relaxed Fit</li>
@@ -206,9 +194,6 @@ public static class DataSeeder
                 Name = "Translucent Shirt",
                 Price = 500,
                 Description = """
-                              <h3>Product Details</h3>
-                              <p>A stylish translucent shirt featuring a lightweight fabric and contemporary design for a standout look.</p>
-
                               <ul>
                                   <li><strong>Material:</strong> Lightweight Polyester Blend</li>
                                   <li><strong>Fit:</strong> Oversized</li>
