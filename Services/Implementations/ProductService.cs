@@ -3,7 +3,7 @@ using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace esewa_market.Services;
+namespace esewa_market.Services.Implementations;
 
 public class ProductService(AppDbContext db) : IProductService
 {
