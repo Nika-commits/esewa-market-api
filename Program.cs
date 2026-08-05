@@ -1,10 +1,18 @@
 using esewa_market.Data;
 using esewa_market.Services.Implementations;
 using esewa_market.Services.Interfaces;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+FirebaseApp.Create(new AppOptions
+{
+    Credential = GoogleCredential.GetApplicationDefault(),
+    ProjectId = "esewa-market"
+});
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

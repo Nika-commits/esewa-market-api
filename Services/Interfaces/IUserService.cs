@@ -5,6 +5,6 @@ namespace esewa_market.Services.Interfaces;
 
 public interface IUserService
 {
-    Task<User> CreateUser(CreateUserRequest user);
-    Task<User> GetUserById(int id);
+    Task<User> CreateUser(CreateUserRequest user, string firebaseUid, string email);
+    Task<User?> GetUserById(int id);
 }

@@ -2,8 +2,9 @@ namespace esewa_market.Data.Dto.Request;
 
 public record CreateUserRequest
 {
-    string Username { get; set; }
-    string FullName { get; set; }
-    string? Address { get; set; }
-    string? Phone { get; set; }
+   public string Username { get; set; }
+   public string FullName { get; set; }
+   public string? Address { get; set; }
+   public string? Phone { get; set; }
+   public string? ProfilePicture { get; set; }
 }

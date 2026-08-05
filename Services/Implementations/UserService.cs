@@ -2,6 +2,7 @@ using esewa_market.Data;
 using esewa_market.Data.Dto.Request;
 using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace esewa_market.Services.Implementations;
 
@@ -10,13 +11,29 @@ public class UserService(
     ) : IUserService
 {
 
-    public async Task<User> CreateUser(CreateUserRequest user)
+    public async Task<User> CreateUser(CreateUserRequest user, string firebaseUid, string email)
     {
-        throw new NotImplementedException();
+        var existingUser = await db.Users.FirstOrDefaultAsync(u => u.FirebaseUid == firebaseUid);
+        if (existingUser != null) return existingUser;
+
+        var newUser = new User
+        {
+            FirebaseUid = firebaseUid,
+            Email = email,
+            Username = user.Username,
+            Address = user.Address,
+            FullName = user.FullName,
+            PhoneNumber = user.Phone,
+            ProfilePicture = user.ProfilePicture
+        };
+
+        await db.Users.AddAsync(newUser);
+        await db.SaveChangesAsync();
+        return newUser;
     }
 
-    public async Task<User> GetUserById(int id)
+    public async Task<User?> GetUserById(int id)
     {
-        throw new NotImplementedException();
+        return await db.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 }
