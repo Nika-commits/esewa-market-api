@@ -15,10 +15,11 @@ public class UserController(
     public async  Task<IActionResult> CreateUser(CreateUserRequest user)
     {
         var authorizationHeader = Request.Headers.Authorization.ToString();
-        if(string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer"))
+        if(string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer",
+            StringComparison.OrdinalIgnoreCase))
             return Unauthorized();
 
-        var idToken = authorizationHeader["Bearer".Length..];
+        var idToken = authorizationHeader["Bearer".Length..].Trim();
 
         try
         {
