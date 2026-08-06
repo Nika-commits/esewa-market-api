@@ -188,7 +188,8 @@ public static class DataSeeder
                     "L",
                     "XL",
                     "XXL"
-                ]
+                ],
+                IsFeatured = true
             },
             new()
             {
@@ -230,7 +231,7 @@ public static class DataSeeder
                     "L",
                     "XL",
                     "XXL"
-                ]
+                ],
             },
       new()
 {
@@ -266,7 +267,6 @@ public static class DataSeeder
         "XL",
         "XXL"
     ],
-    IsFeatured = true
 },
 new()
 {
@@ -303,7 +303,6 @@ new()
         "L",
         "XL"
     ],
-    IsFeatured = true
 },
 new()
 {
@@ -339,7 +338,6 @@ new()
         "L",
         "XL"
     ],
-    IsFeatured = false
 },
 new()
 {
@@ -376,7 +374,6 @@ new()
         "XL",
         "XXL"
     ],
-    IsFeatured = true
 },
 new()
 {
@@ -412,7 +409,6 @@ new()
         "L",
         "XL"
     ],
-    IsFeatured = false
 },
 new()
 {
@@ -451,7 +447,6 @@ new()
         "L",
         "XL"
     ],
-    IsFeatured = true
 },
 new()
 {
@@ -488,7 +483,6 @@ new()
         "L",
         "XL"
     ],
-    IsFeatured = false
 },
 new()
 {
@@ -523,7 +517,6 @@ new()
         "L",
         "XL"
     ],
-    IsFeatured = true
 },
 new()
 {
@@ -560,7 +553,6 @@ new()
         "XL",
         "XXL"
     ],
-    IsFeatured = false
 },
 new()
 {
@@ -597,7 +589,6 @@ new()
         "XL",
         "XXL"
     ],
-    IsFeatured = true
 }
             };
 

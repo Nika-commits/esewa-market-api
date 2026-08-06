@@ -8,7 +8,7 @@ namespace esewa_market.Services.Implementations;
 public class ProductService(AppDbContext db) : IProductService
 {
 
-    public async Task<List<Product>> GetFeaturedProducts(string? category)
+    public async Task<List<Product>> GetProducts(string? category, int page, int pageSize)
     {
         IQueryable<Product> products = db.Products;
 
@@ -16,12 +16,16 @@ public class ProductService(AppDbContext db) : IProductService
         {
             products = products.Where(p => p.IsFeatured == true);
         }
-        return await products.ToListAsync();
+
+        return await products
+            .OrderBy(p => p.Id)
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
 
     public async Task<Product?> GetProductById(int id)
     {
-
         var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
         return product;
     }
