@@ -21,4 +21,13 @@ public class ProductController(
     {
         return Ok(await productService.GetProductById(id));
     }
+
+    [HttpGet("popular")]
+    public ActionResult<List<string>> GetPopularProducts()
+    {
+        var popularCategories = new List<string>{"BabyCare", "Home and Living", "Men's Fashion",
+            "Women's Fashion", "Trending Electronics", "Sports& Travels", "Daily Needs"};
+
+        return Ok(popularCategories);
+    }
 }
