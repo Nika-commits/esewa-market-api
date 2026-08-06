@@ -190,7 +190,6 @@ public static class DataSeeder
                     "XXL"
                 ]
             },
-
             new()
             {
                 Id = 5,
@@ -233,6 +232,373 @@ public static class DataSeeder
                     "XXL"
                 ]
             },
+      new()
+{
+    Id = 6,
+    Name = "Classic Black T-Shirt",
+    Price = 650,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> 100% Cotton</li>
+                      <li><strong>Fit:</strong> Regular Fit</li>
+                      <li><strong>Neck:</strong> Crew Neck</li>
+                      <li><strong>Style:</strong> Everyday Casual</li>
+                  </ul>
+
+                  <p>A simple everyday t-shirt suitable for casual outfits.</p>
+                  """,
+    Brand = "Adiddydas",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/tshirt-blacknwhite-adiddydas/1770641109200"
+    ],
+    Colors =
+    [
+        new("Black", "#000000"),
+        new("White", "#FFFFFF"),
+        new("Grey", "#808080")
+    ],
+    Sizes =
+    [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+    ],
+    IsFeatured = true
+},
+new()
+{
+    Id = 7,
+    Name = "Red Streetwear Hoodie",
+    Price = 1800,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Cotton Blend</li>
+                      <li><strong>Fit:</strong> Oversized</li>
+                      <li><strong>Features:</strong> Adjustable Hood</li>
+                      <li><strong>Pocket:</strong> Kangaroo Pocket</li>
+                  </ul>
+
+                  <p>A comfortable oversized hoodie designed for casual streetwear.</p>
+                  """,
+    Brand = "Adiddydas",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase" +
+        ".co/storage/v1/object/public/product-images/orange-sweater-celine/1770641861684",
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/red-hoodie-adiddydas/1770641449679"
+    ],
+    Colors =
+    [
+        new("Red", "#FF0000"),
+        new("Black", "#000000"),
+        new("White", "#FFFFFF")
+    ],
+    Sizes =
+    [
+        "M",
+        "L",
+        "XL"
+    ],
+    IsFeatured = true
+},
+new()
+{
+    Id = 8,
+    Name = "Puma Casual Sweatshirt",
+    Price = 1450,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Cotton Fleece</li>
+                      <li><strong>Fit:</strong> Relaxed Fit</li>
+                      <li><strong>Sleeves:</strong> Long Sleeve</li>
+                      <li><strong>Style:</strong> Casual Sportswear</li>
+                  </ul>
+
+                  <p>A soft sweatshirt suitable for casual and everyday wear.</p>
+                  """,
+    Brand = "Puma",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/simple-flat-i-heart-you-valentine's-day-t-shirt-puma/1770642082740"
+    ],
+    Colors =
+    [
+        new("Grey", "#808080"),
+        new("Black", "#000000"),
+        new("Blue", "#0000FF")
+    ],
+    Sizes =
+    [
+        "S",
+        "M",
+        "L",
+        "XL"
+    ],
+    IsFeatured = false
+},
+new()
+{
+    Id = 9,
+    Name = "White Oxford Shirt",
+    Price = 1250,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Oxford Cotton</li>
+                      <li><strong>Fit:</strong> Regular Fit</li>
+                      <li><strong>Collar:</strong> Button Down</li>
+                      <li><strong>Style:</strong> Smart Casual</li>
+                  </ul>
+
+                  <p>A versatile Oxford shirt suitable for office and casual occasions.</p>
+                  """,
+    Brand = "Oxford",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase" +
+        ".co/storage/v1/object/public/product-images/translucent-shirt-ael-studio/1770621604147",
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/translucent-shirt-ael-studio/1770621604147"
+    ],
+    Colors =
+    [
+        new("White", "#FFFFFF"),
+        new("Blue", "#ADD8E6")
+    ],
+    Sizes =
+    [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+    ],
+    IsFeatured = true
+},
+new()
+{
+    Id = 10,
+    Name = "MNML Geo Shorts",
+    Price = 1100,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Cotton Blend</li>
+                      <li><strong>Fit:</strong> Relaxed Fit</li>
+                      <li><strong>Pockets:</strong> Front Utility Pockets</li>
+                      <li><strong>Style:</strong> Streetwear</li>
+                  </ul>
+
+                  <p>Comfortable shorts designed for casual summer outfits.</p>
+                  """,
+    Brand = "MNML",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/mnml-men's-front-pocket-geo-shorts-mnml-/1770621839642",
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/mnml-men's-front-pocket-geo-shorts-mnml-/1770621841231"
+    ],
+    Colors =
+    [
+        new("Black", "#000000"),
+        new("Brown", "#A52A2A"),
+        new("Grey", "#808080")
+    ],
+    Sizes =
+    [
+        "M",
+        "L",
+        "XL"
+    ],
+    IsFeatured = false
+},
+new()
+{
+    Id = 11,
+    Name = "Affirmation Oversized Hoodie",
+    Price = 2100,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Heavyweight Cotton</li>
+                      <li><strong>Fit:</strong> Oversized</li>
+                      <li><strong>Hood:</strong> Double Layered</li>
+                      <li><strong>Style:</strong> Premium Streetwear</li>
+                  </ul>
+
+                  <p>A heavyweight hoodie designed for colder weather and streetwear styling.</p>
+                  """,
+    Brand = "Affirmation",
+    Status = "Out-of-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase" +
+        ".co/storage/v1/object/public/product-images/hoodie-puma/1770640995662",
+        "https://gqtuuqsgkyffgcpbfltk.supabase" +
+        ".co/storage/v1/object/public/product-images/affirmation-hoodie-affirmation-/1770621338173",
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/affirmation-hoodie-affirmation-/1770621338156"
+    ],
+    Colors =
+    [
+        new("Black", "#000000"),
+        new("Green", "#008000"),
+        new("Brown", "#A52A2A")
+    ],
+    Sizes =
+    [
+        "M",
+        "L",
+        "XL"
+    ],
+    IsFeatured = true
+},
+new()
+{
+    Id = 12,
+    Name = "Summer Casual Set",
+    Price = 1750,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Lightweight Cotton Blend</li>
+                      <li><strong>Pieces:</strong> Shirt and Shorts</li>
+                      <li><strong>Fit:</strong> Relaxed Fit</li>
+                      <li><strong>Season:</strong> Summer</li>
+                  </ul>
+
+                  <p>A lightweight matching set designed for warm weather.</p>
+                  """,
+    Brand = "Summer Studio",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase" +
+        ".co/storage/v1/object/public/product-images/white-oxford-shirt-oxford/1773052840379",
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/white-oxford-shirt-oxford/1773052838239"
+    ],
+    Colors =
+    [
+        new("White", "#FFFFFF"),
+        new("Beige", "#F5F5DC"),
+        new("Black", "#000000")
+    ],
+    Sizes =
+    [
+        "M",
+        "L",
+        "XL"
+    ],
+    IsFeatured = false
+},
+new()
+{
+    Id = 13,
+    Name = "AEL Studio Translucent Shirt",
+    Price = 950,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Polyester Blend</li>
+                      <li><strong>Fit:</strong> Oversized</li>
+                      <li><strong>Texture:</strong> Lightweight Translucent Fabric</li>
+                      <li><strong>Style:</strong> Contemporary Streetwear</li>
+                  </ul>
+
+                  <p>A lightweight statement shirt suitable for layered outfits.</p>
+                  """,
+    Brand = "AEL Studio",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/shirt-with-green-embroidery-and-plant-no-brand/1770641959695"
+    ],
+    Colors =
+    [
+        new("White", "#FFFFFF"),
+        new("Black", "#000000"),
+        new("Grey", "#808080")
+    ],
+    Sizes =
+    [
+        "M",
+        "L",
+        "XL"
+    ],
+    IsFeatured = true
+},
+new()
+{
+    Id = 14,
+    Name = "Essential Everyday Hoodie",
+    Price = 1600,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Cotton Fleece</li>
+                      <li><strong>Fit:</strong> Regular Fit</li>
+                      <li><strong>Features:</strong> Ribbed Cuffs</li>
+                      <li><strong>Season:</strong> Autumn and Winter</li>
+                  </ul>
+
+                  <p>A versatile everyday hoodie designed for comfort and warmth.</p>
+                  """,
+    Brand = "Essential",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/hoodie-puma/1770640995662",
+    ],
+    Colors =
+    [
+        new("Red", "#FF0000"),
+        new("Black", "#000000"),
+        new("Green", "#008000")
+    ],
+    Sizes =
+    [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+    ],
+    IsFeatured = false
+},
+new()
+{
+    Id = 15,
+    Name = "Premium Streetwear Combo",
+    Price = 2500,
+    Description = """
+                  <ul>
+                      <li><strong>Material:</strong> Premium Cotton Blend</li>
+                      <li><strong>Fit:</strong> Relaxed Fit</li>
+                      <li><strong>Style:</strong> Modern Streetwear</li>
+                      <li><strong>Use:</strong> Casual and Travel</li>
+                  </ul>
+
+                  <p>A premium casual outfit designed for comfortable everyday wear.</p>
+                  """,
+    Brand = "Urban Collection",
+    Status = "In-Stock",
+    ImageUrls =
+    [
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/pranish-nicks/1780819797027",
+        "https://gqtuuqsgkyffgcpbfltk.supabase.co/storage/v1/object/public/product-images/pranish-nicks/1780819796759"
+    ],
+    Colors =
+    [
+        new("Black", "#000000"),
+        new("White", "#FFFFFF"),
+        new("Brown", "#A52A2A")
+    ],
+    Sizes =
+    [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+    ],
+    IsFeatured = true
+}
             };
 
         await db.Products.AddRangeAsync(products);

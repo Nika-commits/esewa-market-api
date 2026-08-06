@@ -27,9 +27,9 @@ public class UserService(
             ProfilePicture = user.ProfilePicture
         };
 
-        await db.Users.AddAsync(newUser);
+       var savedUser = await db.Users.AddAsync(newUser);
         await db.SaveChangesAsync();
-        return newUser;
+        return savedUser.Entity;
     }
 
     public async Task<User?> GetUserById(int id)
