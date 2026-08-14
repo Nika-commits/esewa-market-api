@@ -14,7 +14,7 @@ public class ProductController(
     public async Task<ActionResult<List<Product>>> GetProducts(
         [FromQuery] string? category,
         [FromQuery] int page = 0,
-        [FromQuery] int pageSize = 10
+        [FromQuery] int pageSize = 4
         )
     {
         return Ok(await productService.GetProducts(category, page, pageSize));
@@ -31,7 +31,7 @@ public class ProductController(
     [HttpGet("popular")]
     public ActionResult<List<string>> GetPopularProducts()
     {
-        var popularCategories = new List<string>{"BabyCare", "Home and Living", "Men's Fashion",
+        var popularCategories = new List<string>{"Baby Care", "Home and Living", "Men's Fashion",
             "Women's Fashion", "Trending Electronics", "Sports& Travels", "Daily Needs"};
 
         return Ok(popularCategories);
