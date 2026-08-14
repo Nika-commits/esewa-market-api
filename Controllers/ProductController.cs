@@ -17,6 +17,7 @@ public class ProductController(
         [FromQuery] int pageSize = 4
         )
     {
+        await Task.Delay(2000);
         return Ok(await productService.GetProducts(category, page, pageSize));
     }
 
