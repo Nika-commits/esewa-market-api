@@ -41,13 +41,14 @@ public class ProductController(
         return Ok(popularCategories);
     }
 
-    [HttpPost("/check-promocode")]
-    public ActionResult<bool> CheckPromocode(
-        [FromBody]string promocode,
-        [FromHeader] string
-        )
+    [HttpPost("check-promocode")]
+    public async Task<ActionResult> CheckPromocode(
+        [FromBody] string promocode
+    )
     {
+        await Task.Delay(2000);
         var promocodes = new List<string> { "ESEWA10", "ESEWA20", "ESEWA30" };
-        return Ok(promocodes.Contains(promocode));
+        if (!promocodes.Contains(promocode)) return BadRequest("Invalid promocode");
+        return Ok();
     }
 }

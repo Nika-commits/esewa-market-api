@@ -8,7 +8,7 @@ namespace esewa_market.Services.Implementations;
 
 public class UserService(
     AppDbContext db
-    ) : IUserService
+) : IUserService
 {
 
     public async Task<User> CreateUser(CreateUserRequest user, string firebaseUid, string email)
@@ -27,7 +27,7 @@ public class UserService(
             ProfilePicture = user.ProfilePicture
         };
 
-       var savedUser = await db.Users.AddAsync(newUser);
+        var savedUser = await db.Users.AddAsync(newUser);
         await db.SaveChangesAsync();
         return savedUser.Entity;
     }
@@ -35,5 +35,10 @@ public class UserService(
     public async Task<User?> GetUserById(int id)
     {
         return await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+    }
+
+    public async Task<User?> GetCurrentUser(string firebaseUid)
+    {
+        return await db.Users.FirstOrDefaultAsync(u => u.FirebaseUid == firebaseUid);
     }
 }

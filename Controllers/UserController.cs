@@ -1,4 +1,5 @@
 using esewa_market.Data.Dto.Request;
+using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +10,14 @@ namespace esewa_market.Controllers;
 [ApiController]
 public class UserController(
     IUserService userService
-    ) : ControllerBase
+) : ControllerBase
 {
     [HttpPost]
-    public async  Task<IActionResult> CreateUser(CreateUserRequest user)
+    public async Task<IActionResult> CreateUser(CreateUserRequest user)
     {
         var authorizationHeader = Request.Headers.Authorization.ToString();
-        if(string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer",
-            StringComparison.OrdinalIgnoreCase))
+        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer",
+                StringComparison.OrdinalIgnoreCase))
             return Unauthorized();
 
         var idToken = authorizationHeader["Bearer".Length..].Trim();
@@ -44,5 +45,37 @@ public class UserController(
     {
         var result = await userService.GetUserById(id);
         return Ok(result);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        var authorizationHeader = Request.Headers.Authorization.ToString();
+        if (string.IsNullOrWhiteSpace(authorizationHeader) ||
+            !authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        {
+            return Unauthorized();
+        }
+
+        var idToken = authorizationHeader["Bearer".Length..].Trim();
+        try
+        {
+            var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+            var firebaseUid = decodedToken.Uid;
+
+            if (firebaseUid == null) return Unauthorized();
+
+            var user = await userService.GetCurrentUser(firebaseUid);
+            if (user == null) return NotFound();
+            return Ok(user);
+        }
+        catch (FirebaseAuthException)
+        {
+            return Unauthorized();
+        }
+        catch (IOException)
+        {
+            return NotFound();
+        }
     }
 }
