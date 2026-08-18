@@ -8,14 +8,14 @@ namespace esewa_market.Controllers;
 [ApiController]
 public class ProductController(
     IProductService productService
-    ) : ControllerBase
+) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<Product>>> GetProducts(
         [FromQuery] string? category,
         [FromQuery] int page = 0,
         [FromQuery] int pageSize = 4
-        )
+    )
     {
         await Task.Delay(2000);
         return Ok(await productService.GetProducts(category, page, pageSize));
@@ -24,7 +24,7 @@ public class ProductController(
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Product?>> GetProductById(
         [FromRoute] int id
-        )
+    )
     {
         return Ok(await productService.GetProductById(id));
     }
@@ -32,9 +32,22 @@ public class ProductController(
     [HttpGet("popular")]
     public ActionResult<List<string>> GetPopularProducts()
     {
-        var popularCategories = new List<string>{"Baby Care", "Home and Living", "Men's Fashion",
-            "Women's Fashion", "Trending Electronics", "Sports& Travels", "Daily Needs"};
+        var popularCategories = new List<string>
+        {
+            "Baby Care", "Home and Living", "Men's Fashion",
+            "Women's Fashion", "Trending Electronics", "Sports& Travels", "Daily Needs"
+        };
 
         return Ok(popularCategories);
+    }
+
+    [HttpPost("/check-promocode")]
+    public ActionResult<bool> CheckPromocode(
+        [FromBody]string promocode,
+        [FromHeader] string
+        )
+    {
+        var promocodes = new List<string> { "ESEWA10", "ESEWA20", "ESEWA30" };
+        return Ok(promocodes.Contains(promocode));
     }
 }
