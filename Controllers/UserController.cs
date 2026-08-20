@@ -83,11 +83,12 @@ public class UserController(
     [HttpPost("update-profile")]
     public async Task<IActionResult> UpdateUserProfile(CreateUserRequest user)
     {
+        await Task.Delay(2000);
         var authorizationHeader = Request.Headers.Authorization.ToString();
         if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer ",
                 StringComparison.OrdinalIgnoreCase))
         {
-            return Unauthorized();
+            return Unauthorized("No Authorization Header");
         }
 
         var idToken = authorizationHeader["Bearer".Length..].Trim();
@@ -96,18 +97,21 @@ public class UserController(
         {
             var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
             var firebaseUid = decodedToken.Uid;
-            if (string.IsNullOrWhiteSpace(firebaseUid)) return Unauthorized();
+            if (string.IsNullOrWhiteSpace(firebaseUid)) return Unauthorized("No Firebase UID");
 
-            var result = userService.UpdateUserProfile(
+            var result = await userService.UpdateUserProfile(
                 user,
                 firebaseUid
             );
-            if(result == null) return NotFound();
+            if(result == null)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
         catch (FirebaseException)
         {
-            return Unauthorized();
+            return Unauthorized("Firebase Exception");
         }
     }
 }
