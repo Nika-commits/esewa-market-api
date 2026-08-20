@@ -8,4 +8,5 @@ public interface IUserService
     Task<User> CreateUser(CreateUserRequest user, string firebaseUid, string email);
     Task<User?> GetUserById(int id);
     Task<User?> GetCurrentUser(string firebaseUid);
+    Task<User?> UpdateUserProfile(CreateUserRequest user, string firebaseUid);
 }

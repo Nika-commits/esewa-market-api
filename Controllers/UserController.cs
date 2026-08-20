@@ -1,6 +1,7 @@
 using esewa_market.Data.Dto.Request;
 using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
+using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ public class UserController(
     public async Task<IActionResult> CreateUser(CreateUserRequest user)
     {
         var authorizationHeader = Request.Headers.Authorization.ToString();
-        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer",
+        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer ",
                 StringComparison.OrdinalIgnoreCase))
             return Unauthorized();
 
@@ -76,6 +77,37 @@ public class UserController(
         catch (IOException)
         {
             return NotFound();
+        }
+    }
+
+    [HttpPost("update-profile")]
+    public async Task<IActionResult> UpdateUserProfile(CreateUserRequest user)
+    {
+        var authorizationHeader = Request.Headers.Authorization.ToString();
+        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer ",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return Unauthorized();
+        }
+
+        var idToken = authorizationHeader["Bearer".Length..].Trim();
+
+        try
+        {
+            var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+            var firebaseUid = decodedToken.Uid;
+            if (string.IsNullOrWhiteSpace(firebaseUid)) return Unauthorized();
+
+            var result = userService.UpdateUserProfile(
+                user,
+                firebaseUid
+            );
+            if(result == null) return NotFound();
+            return Ok(result);
+        }
+        catch (FirebaseException)
+        {
+            return Unauthorized();
         }
     }
 }

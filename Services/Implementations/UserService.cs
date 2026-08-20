@@ -41,4 +41,38 @@ public class UserService(
     {
         return await db.Users.FirstOrDefaultAsync(u => u.FirebaseUid == firebaseUid);
     }
+
+    public async Task<User?> UpdateUserProfile(CreateUserRequest user, string firebaseUid)
+    {
+        var currentUser = await db.Users.Where(u => u.FirebaseUid == firebaseUid).FirstOrDefaultAsync();
+        if(currentUser == null) return null;
+
+        if (user.Username != null)
+        {
+            currentUser.Username = user.Username;
+        }
+
+        if (user.FullName != null)
+        {
+            currentUser.FullName = user.FullName;
+        }
+
+        if (user.Address != null)
+        {
+            currentUser.Address = user.Address;
+        }
+
+        if (user.Phone != null)
+        {
+            currentUser.PhoneNumber = user.Phone;
+        }
+
+        if (user.ProfilePicture != null)
+        {
+            currentUser.ProfilePicture = user.ProfilePicture;
+        }
+
+        await db.SaveChangesAsync();
+        return currentUser;
+    }
 }
