@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using esewa_market.Data.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace esewa_market.Data.Entities;
 

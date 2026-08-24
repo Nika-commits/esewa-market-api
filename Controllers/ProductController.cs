@@ -26,12 +26,14 @@ public class ProductController(
         [FromRoute] int id
     )
     {
+        await Task.Delay(500);
         return Ok(await productService.GetProductById(id));
     }
 
     [HttpGet("popular")]
-    public ActionResult<List<string>> GetPopularProducts()
+    public async Task<ActionResult<List<string>>> GetPopularProducts()
     {
+        await Task.Delay(2000);
         var popularCategories = new List<string>
         {
             "Baby Care", "Home and Living", "Men's Fashion",
