@@ -79,9 +79,18 @@ public class OrderService(
             OrderItems = orderItems,
             Status = "Pending"
         };
+        try
+        {
+            db.Orders.Add(order);
+            await db.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.InnerException?.Message);
+            throw new Exception(ex.Message);
+        }
 
-        db.Orders.Add(order);
-        await db.SaveChangesAsync();
 
         return new OrderResponse
         {

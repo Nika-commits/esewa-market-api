@@ -1,4 +1,5 @@
 using esewa_market.Data.Dto.Request;
+using esewa_market.Data.Dto.Response;
 using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
 using FirebaseAdmin.Auth;
@@ -13,7 +14,7 @@ public class OrderController(
 ) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<Order>> CreateOrder(CreateOrderRequest request)
+    public async Task<ActionResult<OrderResponse>> CreateOrder(CreateOrderRequest request)
     {
         var firebaseUid = await GetFirebaseUid();
         if (firebaseUid is null) return Unauthorized();
@@ -33,7 +34,7 @@ public class OrderController(
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Order?>> GetOrderById(int id)
+    public async Task<ActionResult<OrderResponse?>> GetOrderById(int id)
     {
         var firebaseUid = await GetFirebaseUid();
         if (firebaseUid is null) return Unauthorized();
@@ -44,7 +45,7 @@ public class OrderController(
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Order>>> GetOrders()
+    public async Task<ActionResult<List<OrderResponse>>> GetOrders()
     {
         var firebaseUid = await GetFirebaseUid();
         if (firebaseUid is null) return Unauthorized();
@@ -52,6 +53,7 @@ public class OrderController(
         var orders = await orderService.GetOrdersByUserId(firebaseUid);
         return Ok(orders);
     }
+
 
     private async Task<string?> GetFirebaseUid()
     {
@@ -67,7 +69,8 @@ public class OrderController(
         {
             var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
             return decodedToken.Uid;
-        } catch (FirebaseAuthException)
+        }
+        catch (FirebaseAuthException)
         {
             return null;
         }

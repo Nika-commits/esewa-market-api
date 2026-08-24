@@ -19,7 +19,7 @@ public class Order
 
     public string Phone { get; set; } = "";
 
-    public string Promocode { get; set; } = "";
+    public string? Promocode { get; set; }
 
     public string PaymentOption { get; set; } = "";
 
@@ -33,7 +33,7 @@ public class Order
 
     public string Status { get; set; } = "";
 
-    public DateTime OrderDate { get; set; } = DateTime.Now;
+    public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
     public int TotalPrice { get; set; }
 
