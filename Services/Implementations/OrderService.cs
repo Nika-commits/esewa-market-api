@@ -1,4 +1,5 @@
 using esewa_market.Data;
+using esewa_market.Data.Dto.Request;
 using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
 
@@ -8,15 +9,15 @@ public class OrderService(
     AppDbContext db,
     IUserService userService,
     IProductService productService
-    ): IOrderService
+) : IOrderService
 {
 
-    public async Task<Order> CreateOrder(Order order)
+    public async Task<Order> CreateOrder(string firebaseUid, CreateOrderRequest request)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<Order?> GetOrderById(int id)
+    public async Task<Order?> GetOrderById(int id, string firebaseUid)
     {
         throw new NotImplementedException();
     }
