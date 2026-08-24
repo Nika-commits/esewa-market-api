@@ -21,4 +21,6 @@ public class Order
     public string VechlceNumber { get; set; } = "";
     public DateTime OrderDate { get; set; } = DateTime.Now;
     public int TotalPrice { get; set; }
+
+    public ICollection<OrderItems> OrderItems { get; set; } = [];
 }
