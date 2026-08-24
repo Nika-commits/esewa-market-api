@@ -12,9 +12,13 @@ public class OrderResponse
 
     public string PaymentOption { get; set; }
 
-    public string VehicleNumber { get; set; }
+    public string? VehicleNumber { get; set; }
 
-    public string DeliveryCharge { get; set; }
+    public int DeliveryCharge { get; set; }
+
+    public int Discount { get; set; }
+
+    public string Status { get; set; }
 
     public int TotalPrice { get; set; }
 }
@@ -23,7 +27,7 @@ public class OrderItemResponse
 {
     public int ProductId { get; set; }
 
-    public int ProductName { get; set; }
+    public string ProductName { get; set; }
 
     public int Quantity { get; set; }
 

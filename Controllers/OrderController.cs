@@ -1,5 +1,7 @@
+using esewa_market.Data.Dto.Request;
 using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
+using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace esewa_market.Controllers;
@@ -10,9 +12,65 @@ public class OrderController(
     IOrderService orderService
 ) : ControllerBase
 {
-    public async Task<ActionResult<Order>> CreateOrder(int userId)
+    [HttpPost]
+    public async Task<ActionResult<Order>> CreateOrder(CreateOrderRequest request)
     {
-        throw new NotImplementedException();
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        try
+        {
+            var order = await orderService.CreateOrder(
+                firebaseUid,
+                request
+            );
+            return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Order?>> GetOrderById(int id)
+    {
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        var order = await orderService.GetOrderById(id, firebaseUid);
+        if (order is null) return NotFound();
+        return Ok(order);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<Order>>> GetOrders()
+    {
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        var orders = await orderService.GetOrdersByUserId(firebaseUid);
+        return Ok(orders);
+    }
+
+    private async Task<string?> GetFirebaseUid()
+    {
+        var authorizationHeader = Request.Headers.Authorization.ToString();
+        if (string.IsNullOrWhiteSpace(authorizationHeader) ||
+            !authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        var idToken = authorizationHeader["Bearer ".Length..].Trim();
+        try
+        {
+            var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+            return decodedToken.Uid;
+        } catch (FirebaseAuthException)
+        {
+            return null;
+        }
     }
 
 }
