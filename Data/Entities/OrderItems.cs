@@ -5,11 +5,10 @@ using Microsoft.EntityFrameworkCore;
 namespace esewa_market.Data.Entities;
 
 [Table("order_items")]
-
+[PrimaryKey( nameof(OrderId), nameof(ProductId))]
 public class OrderItems
 {
     [Key]
-    public int Id { get; set; }
     public int OrderId { get; set; }
     public Order Order { get; set; }
 
