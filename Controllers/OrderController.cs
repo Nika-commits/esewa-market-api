@@ -16,6 +16,7 @@ public class OrderController(
     [HttpPost]
     public async Task<ActionResult<OrderResponse>> CreateOrder(CreateOrderRequest request)
     {
+        await Task.Delay(3000);
         var firebaseUid = await GetFirebaseUid();
         if (firebaseUid is null) return Unauthorized();
 
@@ -36,6 +37,7 @@ public class OrderController(
     [HttpGet("{id:int}")]
     public async Task<ActionResult<OrderResponse?>> GetOrderById(int id)
     {
+        await Task.Delay(3000);
         var firebaseUid = await GetFirebaseUid();
         if (firebaseUid is null) return Unauthorized();
 
@@ -47,6 +49,7 @@ public class OrderController(
     [HttpGet]
     public async Task<ActionResult<List<OrderResponse>>> GetOrders()
     {
+        await Task.Delay(2000);
         var firebaseUid = await GetFirebaseUid();
         if (firebaseUid is null) return Unauthorized();
 
