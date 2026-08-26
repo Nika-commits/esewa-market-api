@@ -77,7 +77,7 @@ public class OrderService(
             Discount = discount,
             TotalPrice = totalPrice,
             OrderItems = orderItems,
-            Status = "Pending"
+            Status = "Initialized"
         };
         try
         {
@@ -111,6 +111,7 @@ public class OrderService(
         };
     }
 
+
     async Task<OrderResponse?> IOrderService.GetOrderById(int id, string firebaseUid)
     {
         var user = await userService.GetCurrentUser(firebaseUid);
@@ -141,14 +142,17 @@ public class OrderService(
             .FirstOrDefaultAsync();
     }
 
-    public async Task<List<OrderResponse>> GetOrdersByUserId(string firebaseUid)
+    public async Task<List<OrderResponse>> GetOrdersByUserId(
+        string status,
+        string firebaseUid
+    )
     {
         var user = await userService.GetCurrentUser(firebaseUid);
         if (user is null) throw new KeyNotFoundException("User not Found");
 
         return await db.Orders
             .AsNoTracking()
-            .Where(o => o.UserId == user.Id)
+            .Where(o => o.UserId == user.Id && o.Status == status)
             .OrderBy(o => o.OrderDate)
             .Select(o => new OrderResponse
                 {
