@@ -175,4 +175,57 @@ public class OrderService(
                 }
             ).ToListAsync();
     }
+
+    public async Task<OrderResponse?> UpdateOrderStatus(int id, string firebaseUid, string status)
+    {
+        var user = await userService.GetCurrentUser(firebaseUid);
+        if (user is null) throw new KeyNotFoundException("User not found");
+
+        var order = await db
+            .Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(i => i.Product)
+            .FirstOrDefaultAsync(o => o.Id == id && o.UserId == user.Id);
+
+        if (order is null) return null;
+
+        var allowedStatuses = new[]
+        {
+            "Initialized",
+            "Pending",
+            "Processing",
+            "Shipped",
+            "Delivered",
+            "Cancelled"
+        };
+
+        var validStatus =
+            allowedStatuses.FirstOrDefault(x => x.Equals(status, StringComparison.OrdinalIgnoreCase)
+            );
+
+        if (validStatus is null) throw new ArgumentException("Invalid status");
+
+        order.Status = validStatus;
+        await db.SaveChangesAsync();
+
+        return new OrderResponse
+        {
+            Id = order.Id,
+            Address = order.Address,
+            Phone = order.Phone,
+            PaymentOption = order.PaymentOption,
+            DeliveryCharge = order.DeliveryCharge,
+            Discount = order.Discount,
+            Status = validStatus,
+            TotalPrice = order.TotalPrice,
+            VehicleNumber = order.VechlceNumber,
+            OrderItems = order.OrderItems.Select(i => new OrderItemResponse
+            {
+                ProductId = i.ProductId,
+                ProductName = i.Product.Name,
+                Quantity = i.Quantity,
+                Price = i.Price
+            }).ToList()
+        };
+    }
 }

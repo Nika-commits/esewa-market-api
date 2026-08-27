@@ -21,5 +21,9 @@ public interface IOrderService
         string firebaseUid
     );
 
-
+    Task<OrderResponse?> UpdateOrderStatus(
+        int id,
+        string firebaseUid,
+        string status
+    );
 }

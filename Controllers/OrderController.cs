@@ -64,6 +64,26 @@ public class OrderController(
         return Ok(orders);
     }
 
+    [HttpPatch("{id:int}/status")]
+    public async Task<ActionResult<OrderResponse?>> UpdateOrderStatus(
+        [FromRoute] int id,
+        [FromBody] UpdateOrderStatusRequest request
+    )
+    {
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        try
+        {
+            var updatedOrder = await orderService.UpdateOrderStatus(id, firebaseUid, request.Status);
+            if (updatedOrder is null) return NotFound();
+            return Ok(updatedOrder);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     private async Task<string?> GetFirebaseUid()
     {
