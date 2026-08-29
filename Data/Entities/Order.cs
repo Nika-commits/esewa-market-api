@@ -33,6 +33,8 @@ public class Order
 
     public string Status { get; set; } = "";
 
+    public string PaymentStatus { get; set; } = "";
+
     public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
     public int TotalPrice { get; set; }

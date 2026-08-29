@@ -21,6 +21,7 @@ public class OrderResponse
     public string Status { get; set; }
 
     public int TotalPrice { get; set; }
+    public DateTime OrderDate { get; set; }
 }
 
 public class OrderItemResponse
@@ -29,6 +30,8 @@ public class OrderItemResponse
 
     public string ProductName { get; set; }
 
+    public string ProductImage { get; set; }
+    public string Brand { get; set; }
     public int Quantity { get; set; }
 
     public int Price { get; set; }

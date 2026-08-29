@@ -77,7 +77,8 @@ public class OrderService(
             Discount = discount,
             TotalPrice = totalPrice,
             OrderItems = orderItems,
-            Status = "Initialized"
+            Status = "Initialized",
+            PaymentStatus = "Pending"
         };
         try
         {
@@ -100,17 +101,21 @@ public class OrderService(
             PaymentOption = order.PaymentOption,
             DeliveryCharge = order.DeliveryCharge,
             TotalPrice = order.TotalPrice,
-
+            Discount = order.Discount,
+            Status = order.Status,
+            OrderDate = order.OrderDate,
+            VehicleNumber = order.VechlceNumber,
             OrderItems = orderItems.Select(i => new OrderItemResponse
             {
                 ProductId = i.ProductId,
                 ProductName = products[i.ProductId].Name,
+                ProductImage = products[i.ProductId].ImageUrls.FirstOrDefault(),
+                Brand = products[i.ProductId].Brand,
                 Quantity = i.Quantity,
                 Price = i.Price
             }).ToList()
         };
     }
-
 
     async Task<OrderResponse?> IOrderService.GetOrderById(int id, string firebaseUid)
     {
@@ -131,6 +136,7 @@ public class OrderService(
                 Discount = o.Discount,
                 Status = o.Status,
                 TotalPrice = o.TotalPrice,
+                OrderDate = o.OrderDate,
                 OrderItems = o.OrderItems.Select(i => new OrderItemResponse
                 {
                     ProductId = i.ProductId,
@@ -165,10 +171,13 @@ public class OrderService(
                     Discount = o.Discount,
                     Status = o.Status,
                     TotalPrice = o.TotalPrice,
+                    OrderDate = o.OrderDate,
                     OrderItems = o.OrderItems.Select(i => new OrderItemResponse
                     {
                         ProductId = i.ProductId,
                         ProductName = i.Product.Name,
+                        ProductImage = i.Product.ImageUrls.FirstOrDefault(),
+                        Brand = i.Product.Brand,
                         Quantity = i.Quantity,
                         Price = i.Price
                     }).ToList()
@@ -219,13 +228,18 @@ public class OrderService(
             Status = validStatus,
             TotalPrice = order.TotalPrice,
             VehicleNumber = order.VechlceNumber,
+            OrderDate = order.OrderDate,
             OrderItems = order.OrderItems.Select(i => new OrderItemResponse
             {
                 ProductId = i.ProductId,
                 ProductName = i.Product.Name,
+                ProductImage = i.Product.ImageUrls.FirstOrDefault(),
+                Brand = i.Product.Brand,
                 Quantity = i.Quantity,
                 Price = i.Price
             }).ToList()
         };
     }
+
+
 }
