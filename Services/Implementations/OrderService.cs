@@ -74,6 +74,7 @@ public class OrderService(
             Promocode = request.Promocode,
             IsPromocodeApplied = discount > 0,
             DeliveryCharge = deliveryCharge,
+            VehicleNumber = "BA 98 PA 5438",
             Discount = discount,
             TotalPrice = totalPrice,
             OrderItems = orderItems,
@@ -104,7 +105,7 @@ public class OrderService(
             Discount = order.Discount,
             Status = order.Status,
             OrderDate = order.OrderDate,
-            VehicleNumber = order.VechlceNumber,
+            VehicleNumber = order.VehicleNumber,
             OrderItems = orderItems.Select(i => new OrderItemResponse
             {
                 ProductId = i.ProductId,
@@ -131,7 +132,7 @@ public class OrderService(
                 Address = o.Address,
                 Phone = o.Phone,
                 PaymentOption = o.PaymentOption,
-                VehicleNumber = o.VechlceNumber,
+                VehicleNumber = o.VehicleNumber,
                 DeliveryCharge = o.DeliveryCharge,
                 Discount = o.Discount,
                 Status = o.Status,
@@ -149,16 +150,29 @@ public class OrderService(
     }
 
     public async Task<List<OrderResponse>> GetOrdersByUserId(
-        string status,
+        OrdersFilter filter,
         string firebaseUid
     )
     {
         var user = await userService.GetCurrentUser(firebaseUid);
         if (user is null) throw new KeyNotFoundException("User not Found");
 
-        return await db.Orders
+        var query = db.Orders
             .AsNoTracking()
-            .Where(o => o.UserId == user.Id && o.Status == status)
+            .Where(o => o.UserId == user.Id);
+
+        query = filter switch
+        {
+            OrdersFilter.All => query,
+            OrdersFilter.Pending => query.Where(o =>
+                o.Status == "Initialized" || o.Status == "Pending"),
+            OrdersFilter.Cancelled => query.Where(o =>
+                o.Status == "Cancelled"),
+            _ => query
+        };
+
+        return await query
+            .AsNoTracking()
             .OrderBy(o => o.OrderDate)
             .Select(o => new OrderResponse
                 {
@@ -166,7 +180,7 @@ public class OrderService(
                     Address = o.Address,
                     Phone = o.Phone,
                     PaymentOption = o.PaymentOption,
-                    VehicleNumber = o.VechlceNumber,
+                    VehicleNumber = o.VehicleNumber,
                     DeliveryCharge = o.DeliveryCharge,
                     Discount = o.Discount,
                     Status = o.Status,
@@ -227,7 +241,7 @@ public class OrderService(
             Discount = order.Discount,
             Status = validStatus,
             TotalPrice = order.TotalPrice,
-            VehicleNumber = order.VechlceNumber,
+            VehicleNumber = order.VehicleNumber,
             OrderDate = order.OrderDate,
             OrderItems = order.OrderItems.Select(i => new OrderItemResponse
             {

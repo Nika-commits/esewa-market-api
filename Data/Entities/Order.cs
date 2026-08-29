@@ -29,7 +29,7 @@ public class Order
 
     public int DeliveryCharge { get; set; }
 
-    public string VechlceNumber { get; set; } = "";
+    public string VehicleNumber { get; set; } = "";
 
     public string Status { get; set; } = "";
 
