@@ -26,6 +26,6 @@ public enum OrdersFilter
 {
     All,
     Pending,
-    Confirmed,
+    Delivered,
     Cancelled,
 }

@@ -166,6 +166,8 @@ public class OrderService(
             OrdersFilter.All => query,
             OrdersFilter.Pending => query.Where(o =>
                 o.Status == "Initialized" || o.Status == "Pending"),
+            OrdersFilter.Delivered => query.Where(o =>
+                o.Status == "Delivered"),
             OrdersFilter.Cancelled => query.Where(o =>
                 o.Status == "Cancelled"),
             _ => query

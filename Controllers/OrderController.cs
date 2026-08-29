@@ -50,10 +50,11 @@ public class OrderController(
 
     [HttpGet]
     public async Task<ActionResult<List<OrderResponse>>> GetOrders(
-        [FromQuery] OrdersFilter filter
+        [FromQuery(Name = "status")] OrdersFilter filter
     )
     {
         await Task.Delay(2000);
+        Console.WriteLine(filter);
         var firebaseUid = await GetFirebaseUid();
         if (firebaseUid is null) return Unauthorized();
 
