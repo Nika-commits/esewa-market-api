@@ -32,7 +32,7 @@ public enum OrdersFilter
 
 public class OrderFilterRequest
 {
-    public OrdersFilter Filter { get; set; } = OrdersFilter.All;
+    public OrdersFilter Status { get; set; } = OrdersFilter.All;
 
     public DateOnly? From { get; set; }
 

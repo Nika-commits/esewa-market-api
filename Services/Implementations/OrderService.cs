@@ -161,7 +161,7 @@ public class OrderService(
             .AsNoTracking()
             .Where(o => o.UserId == user.Id);
 
-        query = filter.Filter switch
+        query = filter.Status switch
         {
             OrdersFilter.All => query,
             OrdersFilter.Pending => query.Where(o =>

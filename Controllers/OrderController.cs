@@ -54,7 +54,9 @@ public class OrderController(
     )
     {
         await Task.Delay(2000);
-        Console.WriteLine(filter);
+        Console.WriteLine(filter.Status);
+        Console.WriteLine(filter.From);
+        Console.WriteLine(filter.To);
         var firebaseUid = await GetFirebaseUid();
         if (firebaseUid is null) return Unauthorized();
 
