@@ -175,13 +175,19 @@ public class OrderService(
 
         if (filter.From.HasValue)
         {
-            var fromDate = filter.From.Value.ToDateTime(TimeOnly.MinValue);
+            var fromDate = DateTime.SpecifyKind(
+                filter.From.Value.ToDateTime(TimeOnly.MinValue),
+                DateTimeKind.Utc
+            );
             query = query.Where(o => o.OrderDate >= fromDate);
         }
 
         if (filter.To.HasValue)
         {
-            var nextDay = filter.To.Value.AddDays(1).ToDateTime(TimeOnly.MinValue);
+            var nextDay = DateTime.SpecifyKind(
+                filter.To.Value.ToDateTime(TimeOnly.MaxValue),
+                DateTimeKind.Utc
+            );
             query = query.Where(o => o.OrderDate < nextDay);
         }
 
