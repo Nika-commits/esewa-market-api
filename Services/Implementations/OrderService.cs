@@ -150,7 +150,7 @@ public class OrderService(
     }
 
     public async Task<List<OrderResponse>> GetOrdersByUserId(
-        OrdersFilter filter,
+        OrderFilterRequest filter,
         string firebaseUid
     )
     {
@@ -161,7 +161,7 @@ public class OrderService(
             .AsNoTracking()
             .Where(o => o.UserId == user.Id);
 
-        query = filter switch
+        query = filter.Filter switch
         {
             OrdersFilter.All => query,
             OrdersFilter.Pending => query.Where(o =>
@@ -172,6 +172,18 @@ public class OrderService(
                 o.Status == "Cancelled"),
             _ => query
         };
+
+        if (filter.From.HasValue)
+        {
+            var fromDate = filter.From.Value.ToDateTime(TimeOnly.MinValue);
+            query = query.Where(o => o.OrderDate >= fromDate);
+        }
+
+        if (filter.To.HasValue)
+        {
+            var toDate = filter.To.Value.ToDateTime(TimeOnly.MaxValue);
+            query = query.Where(o => o.OrderDate <= toDate);
+        }
 
         return await query
             .AsNoTracking()

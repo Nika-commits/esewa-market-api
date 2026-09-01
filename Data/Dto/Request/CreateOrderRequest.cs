@@ -29,3 +29,12 @@ public enum OrdersFilter
     Delivered,
     Cancelled,
 }
+
+public class OrderFilterRequest
+{
+    public OrdersFilter Filter { get; set; } = OrdersFilter.All;
+
+    public DateOnly? From { get; set; }
+
+    public DateOnly? To { get; set; }
+}

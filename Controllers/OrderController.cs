@@ -50,7 +50,7 @@ public class OrderController(
 
     [HttpGet]
     public async Task<ActionResult<List<OrderResponse>>> GetOrders(
-        [FromQuery(Name = "status")] OrdersFilter filter
+        [FromQuery] OrderFilterRequest filter
     )
     {
         await Task.Delay(2000);

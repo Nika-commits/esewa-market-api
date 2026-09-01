@@ -17,7 +17,7 @@ public interface IOrderService
     );
 
     Task<List<OrderResponse>> GetOrdersByUserId(
-        OrdersFilter filter,
+        OrderFilterRequest filter,
         string firebaseUid
     );
 
