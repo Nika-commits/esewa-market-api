@@ -181,8 +181,8 @@ public class OrderService(
 
         if (filter.To.HasValue)
         {
-            var toDate = filter.To.Value.ToDateTime(TimeOnly.MaxValue);
-            query = query.Where(o => o.OrderDate <= toDate);
+            var nextDay = filter.To.Value.AddDays(1).ToDateTime(TimeOnly.MinValue);
+            query = query.Where(o => o.OrderDate < nextDay);
         }
 
         return await query
