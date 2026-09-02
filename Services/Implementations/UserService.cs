@@ -21,9 +21,7 @@ public class UserService(
             FirebaseUid = firebaseUid,
             Email = email,
             Username = user.Username,
-            Address = user.Address,
             FullName = user.FullName,
-            PhoneNumber = user.Phone,
             ProfilePicture = user.ProfilePicture
         };
 
@@ -45,7 +43,7 @@ public class UserService(
     public async Task<User?> UpdateUserProfile(CreateUserRequest user, string firebaseUid)
     {
         var currentUser = await db.Users.Where(u => u.FirebaseUid == firebaseUid).FirstOrDefaultAsync();
-        if(currentUser == null) return null;
+        if (currentUser == null) return null;
 
         if (user.Username != null)
         {
@@ -57,16 +55,6 @@ public class UserService(
             currentUser.FullName = user.FullName;
         }
 
-        if (user.Address != null)
-        {
-            currentUser.Address = user.Address;
-        }
-
-        if (user.Phone != null)
-        {
-            currentUser.PhoneNumber = user.Phone;
-        }
-
         if (user.ProfilePicture != null)
         {
             currentUser.ProfilePicture = user.ProfilePicture;
@@ -75,4 +63,5 @@ public class UserService(
         await db.SaveChangesAsync();
         return currentUser;
     }
+
 }

@@ -20,13 +20,14 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.Al
     .AllowAnyMethod().AllowAnyHeader()));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-     options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")
-     )
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")
+    )
 );
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 
 var app = builder.Build();
 
@@ -39,7 +40,7 @@ using (var scope = app.Services.CreateScope())
         db.Database.Migrate();
         await DataSeeder.Seed(services);
     }
-    catch(Exception ex)
+    catch (Exception ex)
     {
         Console.WriteLine(ex.Message);
     }
