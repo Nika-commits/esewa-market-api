@@ -10,7 +10,8 @@ namespace esewa_market.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class UserController(
-    IUserService userService
+    IUserService userService,
+    IAddressService addressService
 ) : ControllerBase
 {
     [HttpPost]
@@ -103,15 +104,96 @@ public class UserController(
                 user,
                 firebaseUid
             );
-            if(result == null)
+            if (result == null)
             {
                 return NotFound();
             }
+
             return Ok(result);
         }
         catch (FirebaseException)
         {
             return Unauthorized("Firebase Exception");
+        }
+    }
+
+    [HttpPost("address")]
+    public async Task<ActionResult<Address>> CreateAddress(
+        CreateAddressRequest request)
+    {
+        await Task.Delay(2000);
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        var response = await addressService.CreateAddress(firebaseUid, request);
+        return Ok(response);
+    }
+
+    [HttpGet("address")]
+    public async Task<ActionResult<List<Address>>> GetAddresses()
+    {
+        await Task.Delay(2000);
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        var response = await addressService.GetAddresses(firebaseUid);
+        return Ok(response);
+    }
+
+    [HttpDelete("address/{id:int}")]
+    public async Task<ActionResult> DeleteAddress(int id)
+    {
+        await Task.Delay(2000);
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        await addressService.DeleteAddress(id, firebaseUid);
+        return Ok();
+    }
+
+    [HttpPut("address/{id:int}")]
+    public async Task<ActionResult<Address>> UpdateAddress(int id,
+        CreateAddressRequest request)
+    {
+        await Task.Delay(2000);
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        var response = await addressService.UpdateAddress(id, firebaseUid, request);
+        return Ok(response);
+    }
+
+    [HttpPatch("address/{id:int}/set-default")]
+    public async Task<ActionResult> SetDefaultAddress(int id)
+    {
+        await Task.Delay(2000);
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        await addressService.SetDefaultAddress(id, firebaseUid);
+        return Ok();
+    }
+
+
+    private async Task<string?> GetFirebaseUid()
+    {
+        var authorizationHeader = Request.Headers.Authorization.ToString();
+        if (string.IsNullOrWhiteSpace(authorizationHeader) ||
+            !authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        var idToken = authorizationHeader["Bearer".Length..].Trim();
+
+        try
+        {
+            var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+            return decodedToken.Uid;
+        }
+        catch (FirebaseAuthException)
+        {
+            return null;
         }
     }
 }

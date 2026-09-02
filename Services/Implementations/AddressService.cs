@@ -17,7 +17,7 @@ public class AddressService(
         var userId = await userService.GetCurrentUser(firebaseUid);
         if (userId is null) throw new KeyNotFoundException("User not found");
 
-        var addresses = db.Addresses.Where(a => a.UserId == userId.Id).ToList();
+        var addresses = await db.Addresses.Where(a => a.UserId == userId.Id).ToListAsync();
         return addresses;
     }
 
@@ -35,11 +35,19 @@ public class AddressService(
         var user = await userService.GetCurrentUser(firebaseUid);
         if (user is null) throw new KeyNotFoundException("User not found");
 
+        var existingAddresses = await GetAddresses(firebaseUid);
+        if (existingAddresses.Count >= 5) throw new Exception("You can only have 5 addresses");
+
+        if (existingAddresses.Count == 0)
+        {
+            request.IsDefaultAddress = true;
+        }
+
         var address = new Address
         {
             UserId = user.Id,
             FullName = request.FullName,
-            FullAddress = request.FullName,
+            FullAddress = request.FullAddress,
             PhoneNumber = request.PhoneNumber,
             Label = request.Label,
             IsDefaultAddress = request.IsDefaultAddress,

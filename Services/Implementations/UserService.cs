@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace esewa_market.Services.Implementations;
 
 public class UserService(
-    AppDbContext db,
-    IAddressService addressService
+    AppDbContext db
 ) : IUserService
 {
 
@@ -36,7 +35,12 @@ public class UserService(
     {
         var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
         if (user == null) return null;
-        var defaultAddress = await addressService.GetDefaultAddress(id);
+
+        var defaultAddress = await db.Addresses
+            .FirstOrDefaultAsync(a =>
+                a.UserId == id &&
+                a.IsDefaultAddress);
+
 
         var response = new UserResponse
         {
@@ -57,7 +61,12 @@ public class UserService(
         var user = await db.Users.FirstOrDefaultAsync(u => u.FirebaseUid == firebaseUid);
         if (user == null) return null;
 
-        var defaultAddress = await addressService.GetDefaultAddress(user.Id);
+
+        var defaultAddress = await db.Addresses
+            .FirstOrDefaultAsync(a =>
+                a.UserId == user.Id &&
+                a.IsDefaultAddress);
+
 
         var response = new UserResponse
         {
