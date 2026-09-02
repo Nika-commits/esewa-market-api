@@ -37,7 +37,6 @@ public class UserService(
         var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
         if (user == null) return null;
         var defaultAddress = await addressService.GetDefaultAddress(id);
-        if (defaultAddress == null) return null;
 
         var response = new UserResponse
         {
@@ -45,8 +44,8 @@ public class UserService(
             FullName = user.FullName,
             Username = user.Username,
             Email = user.Email,
-            Address = defaultAddress.FullAddress,
-            Phone = defaultAddress.PhoneNumber,
+            Address = defaultAddress?.FullAddress,
+            Phone = defaultAddress?.PhoneNumber,
             ProfilePicture = user.ProfilePicture ?? "",
         };
 
@@ -57,8 +56,8 @@ public class UserService(
     {
         var user = await db.Users.FirstOrDefaultAsync(u => u.FirebaseUid == firebaseUid);
         if (user == null) return null;
+
         var defaultAddress = await addressService.GetDefaultAddress(user.Id);
-        if (defaultAddress == null) return null;
 
         var response = new UserResponse
         {
@@ -66,8 +65,8 @@ public class UserService(
             FullName = user.FullName,
             Username = user.Username,
             Email = user.Email,
-            Address = defaultAddress.FullAddress,
-            Phone = defaultAddress.PhoneNumber,
+            Address = defaultAddress?.FullAddress,
+            Phone = defaultAddress?.PhoneNumber,
             ProfilePicture = user.ProfilePicture ?? "",
         };
 
