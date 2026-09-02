@@ -68,6 +68,7 @@ public class UserController(
             if (firebaseUid == null) return Unauthorized();
 
             var user = await userService.GetCurrentUser(firebaseUid);
+            Console.WriteLine(user);
             if (user == null) return NotFound();
             return Ok(user);
         }
