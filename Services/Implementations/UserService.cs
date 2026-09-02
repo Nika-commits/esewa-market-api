@@ -1,5 +1,6 @@
 using esewa_market.Data;
 using esewa_market.Data.Dto.Request;
+using esewa_market.Data.Dto.Response;
 using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 namespace esewa_market.Services.Implementations;
 
 public class UserService(
-    AppDbContext db
+    AppDbContext db,
+    IAddressService addressService
 ) : IUserService
 {
 
@@ -30,14 +32,46 @@ public class UserService(
         return savedUser.Entity;
     }
 
-    public async Task<User?> GetUserById(int id)
+    public async Task<UserResponse?> GetUserById(int id)
     {
-        return await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+        if (user == null) return null;
+        var defaultAddress = await addressService.GetDefaultAddress(id);
+        if (defaultAddress == null) return null;
+
+        var response = new UserResponse
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            Username = user.Username,
+            Email = user.Email,
+            Address = defaultAddress.FullAddress,
+            Phone = defaultAddress.PhoneNumber,
+            ProfilePicture = user.ProfilePicture ?? "",
+        };
+
+        return response;
     }
 
-    public async Task<User?> GetCurrentUser(string firebaseUid)
+    public async Task<UserResponse?> GetCurrentUser(string firebaseUid)
     {
-        return await db.Users.FirstOrDefaultAsync(u => u.FirebaseUid == firebaseUid);
+        var user = await db.Users.FirstOrDefaultAsync(u => u.FirebaseUid == firebaseUid);
+        if (user == null) return null;
+        var defaultAddress = await addressService.GetDefaultAddress(user.Id);
+        if (defaultAddress == null) return null;
+
+        var response = new UserResponse
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            Username = user.Username,
+            Email = user.Email,
+            Address = defaultAddress.FullAddress,
+            Phone = defaultAddress.PhoneNumber,
+            ProfilePicture = user.ProfilePicture ?? "",
+        };
+
+        return response;
     }
 
     public async Task<User?> UpdateUserProfile(CreateUserRequest user, string firebaseUid)

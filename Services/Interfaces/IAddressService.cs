@@ -7,6 +7,8 @@ public interface IAddressService
 {
     Task<List<Address>> GetAddresses(string firebaseUid);
 
+    Task<Address?> GetDefaultAddress(int userId);
+
     Task<Address> CreateAddress(
         string firebaseUid,
         CreateAddressRequest request

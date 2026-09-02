@@ -21,6 +21,13 @@ public class AddressService(
         return addresses;
     }
 
+    public async Task<Address?> GetDefaultAddress(int userId)
+    {
+        var address =
+            await db.Addresses.FirstOrDefaultAsync(a => a.UserId == userId && a.IsDefaultAddress == true);
+        return address;
+    }
+
     public async Task<Address> CreateAddress(
         string firebaseUid,
         CreateAddressRequest request)
