@@ -141,6 +141,17 @@ public class UserController(
         return Ok(response);
     }
 
+    [HttpGet("address/{id:int}")]
+    public async Task<ActionResult<Address>> GetAddressById(int id)
+    {
+        await Task.Delay(2000);
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        var response = await addressService.GetAddressById(id, firebaseUid);
+        return Ok(response);
+    }
+
     [HttpDelete("address/{id:int}")]
     public async Task<ActionResult> DeleteAddress(int id)
     {

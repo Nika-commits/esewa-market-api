@@ -21,6 +21,15 @@ public class AddressService(
         return addresses;
     }
 
+    public async Task<Address?> GetAddressById(int id, string firebaseUid)
+    {
+        var user = await userService.GetCurrentUser(firebaseUid);
+        if (user is null) throw new KeyNotFoundException("User not found");
+
+        var address = await db.Addresses.FirstOrDefaultAsync(a => a.Id == id && a.UserId == user.Id);
+        return address;
+    }
+
     public async Task<Address?> GetDefaultAddress(int userId)
     {
         var address =
