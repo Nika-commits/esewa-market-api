@@ -55,6 +55,12 @@ public class AddressService(
             request.IsDefaultAddress = true;
         }
 
+        if (request.IsDefaultAddress)
+        {
+            var currentDefault = await GetDefaultAddress(user.Id);
+            currentDefault?.IsDefaultAddress = false;
+        }
+
         var address = new Address
         {
             UserId = user.Id,
@@ -111,16 +117,14 @@ public class AddressService(
         var user = await userService.GetCurrentUser(firebaseUid);
         if (user is null) throw new KeyNotFoundException("User not found");
 
-        var addresses = await db.Addresses.Where(a => a.UserId == user.Id).ToListAsync();
-
-        var selectedAddress = addresses.FirstOrDefault(a => a.Id == id);
-
+        var selectedAddress = await db.Addresses.FirstOrDefaultAsync(a => a.Id == id && a.UserId == user
+            .Id);
         if (selectedAddress is null) throw new KeyNotFoundException("Address not found");
 
-        foreach (var address in addresses)
-        {
-            address.IsDefaultAddress = address.Id == id;
-        }
+        var currentDefault = await GetDefaultAddress(user.Id);
+        currentDefault?.IsDefaultAddress = false;
+
+        selectedAddress.IsDefaultAddress = true;
 
         await db.SaveChangesAsync();
     }
