@@ -55,7 +55,6 @@ public class AddressService(
             request.IsDefaultAddress = true;
         }
 
-
         if (request.IsDefaultAddress)
         {
             await ClearDefaultAddress(user.Id);
@@ -98,11 +97,18 @@ public class AddressService(
 
         if (address is null) throw new KeyNotFoundException("Address not found");
 
+        if (request.IsDefaultAddress)
+        {
+            await ClearDefaultAddress(user.Id);
+        }
+
         address.FullName = request.FullName;
         address.FullAddress = request.FullAddress;
         address.PhoneNumber = request.PhoneNumber;
         address.Label = request.Label;
         address.UpdatedAt = DateTime.UtcNow;
+        address.IsDefaultAddress = request.IsDefaultAddress;
+        address.IsDefaultShippingAddress = request.IsDefaultShippingAddress;
 
         await db.SaveChangesAsync();
         return ToResponse(address);
