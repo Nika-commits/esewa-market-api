@@ -1,4 +1,5 @@
 using esewa_market.Data.Dto.Request;
+using esewa_market.Data.Dto.Response;
 using esewa_market.Data.Entities;
 using esewa_market.Services.Interfaces;
 using FirebaseAdmin;
@@ -119,8 +120,8 @@ public class UserController(
     }
 
     [HttpPost("address")]
-    public async Task<ActionResult<Address>> CreateAddress(
-        CreateAddressRequest request)
+    public async Task<ActionResult<UserAddressResponse>> CreateAddress(
+        [FromBody] CreateAddressRequest request)
     {
         await Task.Delay(2000);
         var firebaseUid = await GetFirebaseUid();
@@ -131,7 +132,7 @@ public class UserController(
     }
 
     [HttpGet("address")]
-    public async Task<ActionResult<List<Address>>> GetAddresses()
+    public async Task<ActionResult<List<UserAddressResponse>>> GetAddresses()
     {
         await Task.Delay(2000);
         var firebaseUid = await GetFirebaseUid();
@@ -142,7 +143,7 @@ public class UserController(
     }
 
     [HttpGet("address/{id:int}")]
-    public async Task<ActionResult<Address>> GetAddressById(int id)
+    public async Task<ActionResult<UserAddressResponse>> GetAddressById([FromRoute] int id)
     {
         await Task.Delay(2000);
         var firebaseUid = await GetFirebaseUid();
@@ -153,7 +154,7 @@ public class UserController(
     }
 
     [HttpDelete("address/{id:int}")]
-    public async Task<ActionResult> DeleteAddress(int id)
+    public async Task<ActionResult> DeleteAddress([FromRoute] int id)
     {
         await Task.Delay(2000);
         var firebaseUid = await GetFirebaseUid();
@@ -164,8 +165,9 @@ public class UserController(
     }
 
     [HttpPut("address/{id:int}")]
-    public async Task<ActionResult<Address>> UpdateAddress(int id,
-        CreateAddressRequest request)
+    public async Task<ActionResult<UserAddressResponse>> UpdateAddress(
+        [FromRoute] int id,
+        [FromBody] CreateAddressRequest request)
     {
         await Task.Delay(2000);
         var firebaseUid = await GetFirebaseUid();
@@ -176,7 +178,7 @@ public class UserController(
     }
 
     [HttpPatch("address/{id:int}/set-default")]
-    public async Task<ActionResult> SetDefaultAddress(int id)
+    public async Task<ActionResult> SetDefaultAddress([FromRoute] int id)
     {
         await Task.Delay(2000);
         var firebaseUid = await GetFirebaseUid();

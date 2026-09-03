@@ -1,22 +1,23 @@
 using esewa_market.Data.Dto.Request;
+using esewa_market.Data.Dto.Response;
 using esewa_market.Data.Entities;
 
 namespace esewa_market.Services.Interfaces;
 
 public interface IAddressService
 {
-    Task<List<Address>> GetAddresses(string firebaseUid);
+    Task<List<UserAddressResponse>> GetAddresses(string firebaseUid);
 
-    Task<Address?> GetAddressById(int id, string firebaseUid);
+    Task<UserAddressResponse?> GetAddressById(int id, string firebaseUid);
 
-    Task<Address?> GetDefaultAddress(int userId);
+    Task<UserAddressResponse?> GetDefaultAddress(int userId);
 
-    Task<Address> CreateAddress(
+    Task<UserAddressResponse> CreateAddress(
         string firebaseUid,
         CreateAddressRequest request
     );
 
-    Task<Address> UpdateAddress(
+    Task<UserAddressResponse> UpdateAddress(
         int id,
         string firebaseUid,
         CreateAddressRequest request

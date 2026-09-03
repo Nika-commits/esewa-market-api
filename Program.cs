@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using esewa_market.Data;
 using esewa_market.Services.Implementations;
 using esewa_market.Services.Interfaces;
@@ -14,7 +15,11 @@ FirebaseApp.Create(new AppOptions
     ProjectId = "esewa-market"
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddOpenApi();
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin()
     .AllowAnyMethod().AllowAnyHeader()));
@@ -23,6 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")
     )
 );
+
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
