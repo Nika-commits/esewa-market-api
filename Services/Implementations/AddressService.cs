@@ -47,18 +47,18 @@ public class AddressService(
         var user = await userService.GetCurrentUser(firebaseUid);
         if (user is null) throw new KeyNotFoundException("User not found");
 
-        var existingAddresses = await GetAddresses(firebaseUid);
-        if (existingAddresses.Count >= 5) throw new Exception("You can only have 5 addresses");
+        var addressCount = await db.Addresses.CountAsync(a => a.UserId == user.Id);
+        if (addressCount >= 5) throw new Exception("You can only have 5 addresses");
 
-        if (existingAddresses.Count == 0)
+        if (addressCount == 0)
         {
             request.IsDefaultAddress = true;
         }
 
+
         if (request.IsDefaultAddress)
         {
-            var currentDefault = await GetDefaultAddress(user.Id);
-            currentDefault?.IsDefaultAddress = false;
+            await ClearDefaultAddress(user.Id);
         }
 
         var address = new Address
@@ -75,6 +75,15 @@ public class AddressService(
         await db.Addresses.AddAsync(address);
         await db.SaveChangesAsync();
         return ToResponse(address);
+    }
+
+    private async Task ClearDefaultAddress(int userId)
+    {
+        await db.Addresses
+            .Where(a => a.UserId == userId && a.IsDefaultAddress == true)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(a => a.IsDefaultAddress, false)
+            );
     }
 
     public async Task<UserAddressResponse> UpdateAddress(int id,
@@ -117,16 +126,16 @@ public class AddressService(
         var user = await userService.GetCurrentUser(firebaseUid);
         if (user is null) throw new KeyNotFoundException("User not found");
 
-        var selectedAddress = await db.Addresses.FirstOrDefaultAsync(a => a.Id == id && a.UserId == user
-            .Id);
-        if (selectedAddress is null) throw new KeyNotFoundException("Address not found");
+        var exists = await db.Addresses.AnyAsync(a => a.Id == id && a.UserId == user.Id);
+        if (!exists) throw new Exception("Address not found");
 
-        var currentDefault = await GetDefaultAddress(user.Id);
-        currentDefault?.IsDefaultAddress = false;
+        await ClearDefaultAddress(user.Id);
 
-        selectedAddress.IsDefaultAddress = true;
-
-        await db.SaveChangesAsync();
+        await db.Addresses
+            .Where(a => a.Id == id && a.UserId == user.Id)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(a => a.IsDefaultAddress, true)
+            );
     }
 
     private static UserAddressResponse ToResponse(Address address)
