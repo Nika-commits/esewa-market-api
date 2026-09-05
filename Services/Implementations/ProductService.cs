@@ -8,13 +8,20 @@ namespace esewa_market.Services.Implementations;
 public class ProductService(AppDbContext db) : IProductService
 {
 
-    public async Task<List<Product>> GetProducts(string? category, int page, int pageSize)
+    public async Task<List<Product>> GetProducts(string? category, string? search, int page, int pageSize)
     {
         IQueryable<Product> products = db.Products;
 
         if (!string.IsNullOrWhiteSpace(category) && category == "featured")
         {
             products = products.Where(p => p.IsFeatured == true);
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            products = products.Where(p =>
+                EF.Functions.ILike(p.Name, $"%{search}%") ||
+                EF.Functions.ILike(p.Description, $"%{search}%"));
         }
 
         return await products

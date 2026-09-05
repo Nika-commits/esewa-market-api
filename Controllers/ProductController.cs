@@ -13,12 +13,13 @@ public class ProductController(
     [HttpGet]
     public async Task<ActionResult<List<Product>>> GetProducts(
         [FromQuery] string? category,
+        [FromQuery] string? search,
         [FromQuery] int page = 0,
         [FromQuery] int pageSize = 4
     )
     {
         await Task.Delay(2000);
-        return Ok(await productService.GetProducts(category, page, pageSize));
+        return Ok(await productService.GetProducts(category, search, page, pageSize));
     }
 
     [HttpGet("{id:int}")]
