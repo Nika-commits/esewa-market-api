@@ -53,4 +53,13 @@ public class ProductController(
         if (!promocodes.Contains(promocode)) return BadRequest("Invalid promocode");
         return Ok();
     }
+
+    [HttpGet("search-suggestions")]
+    public async Task<ActionResult<List<string>>> GetSearchSuggestions(
+        [FromQuery] string query)
+    {
+        if (string.IsNullOrWhiteSpace(query) || query.Length < 2) return Ok(new List<string>());
+
+        return Ok(await productService.GetSearchSuggestions(query));
+    }
 }

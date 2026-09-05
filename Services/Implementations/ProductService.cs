@@ -29,4 +29,14 @@ public class ProductService(AppDbContext db) : IProductService
         var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
         return product;
     }
+
+    public async Task<List<string>> GetSearchSuggestions(string query)
+    {
+        return await db.Products
+            .Where(p => EF.Functions.ILike(p.Name, $"%{query}%"))
+            .OrderBy(p => p.Name)
+            .Select(p => p.Name)
+            .Take(10)
+            .ToListAsync();
+    }
 }
