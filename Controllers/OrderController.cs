@@ -134,10 +134,8 @@ public class OrderController(
 
         try
         {
-            var token = authorizationHeader["Bearer ".Length..].Trim();
             var response = await khaltiService.InitiatePayment(
-                id,
-                token);
+                id);
             logger.LogInformation("Khalti response: {response}", response);
             return Ok(response);
         }
@@ -149,22 +147,32 @@ public class OrderController(
     }
 
 
-    [HttpPost("khalti/verify")]
-    public async Task<ActionResult<KhaltiVerificationResponse?>> VerifyKhaltiPayment(
+    [HttpPost("khalti/verify/{id:int}")]
+    public async Task<ActionResult<OrderResponse?>> VerifyKhaltiPayment(
+        [FromRoute] int id,
         [FromQuery] string pidx)
     {
         await Task.Delay(2000);
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
         try
         {
-            var payload = new KhaltiPaymentVerificationRequest
-            {
-                PIDX = pidx
-            };
-            var response = await khaltiService.LookupPayment(payload);
+            var response = await khaltiService.VerifyPayment(
+                pidx: pidx,
+                firebaseUid: firebaseUid,
+                orderId: id
+            );
+
+            if (response is null) BadRequest("Payment Verification Failed");
             return Ok(response);
         }
         catch (Exception ex)
         {
+            logger.LogError(
+                ex,
+                "Khalti payment verification failed for order {OrderId}",
+                id
+            );
             return BadRequest(ex.Message);
         }
     }

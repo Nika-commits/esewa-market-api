@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Text;
 using esewa_market.Data;
 using esewa_market.Data.Dto.Request;
@@ -21,9 +22,12 @@ public class KhaltiService(
     private string _khaltiPublicKey = configuration["Khalti:PublicKey"] ?? throw new
         InvalidOperationException("Khalti Secret Key not configured");
 
+    private readonly string _khaltiSecretKey = configuration["Khalti:SecretKey"] ??
+                                               throw new InvalidOperationException(
+                                                   "Khalti Secret Key not configured");
+
     public async Task<KhaltiPaymentResponse?> InitiatePayment(
-        int orderId,
-        string authToken)
+        int orderId)
     {
         logger.LogInformation("Initiating Khalti payment for order {orderId}", orderId);
         var order = await db.Orders
@@ -75,7 +79,7 @@ public class KhaltiService(
 
 
         var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("Authorization", $"Key {authToken}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Key {_khaltiSecretKey}");
         var response = await client.PostAsync(KhaltiUrl + InitiateUrl, content);
         var responseContent = await response.Content.ReadAsStringAsync();
         logger.LogInformation("Khalti response: {responseContent}", responseContent);
@@ -90,8 +94,93 @@ public class KhaltiService(
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
         var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("Authorization", "");
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Key", _khaltiSecretKey);
+
         var response = await client.PostAsync(KhaltiUrl + LookupUrl, content);
-        return await response.Content.ReadFromJsonAsync<KhaltiVerificationResponse>();
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        logger.LogInformation("Khalti lookup response: {Response}", responseContent);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(
+                $"Khalti lookup failed: " +
+                $"{response.StatusCode} - {responseContent}"
+            );
+        }
+
+        return JsonConvert.DeserializeObject<KhaltiVerificationResponse>(responseContent);
+    }
+
+    public async Task<OrderResponse?> VerifyPayment(
+        int orderId,
+        string firebaseUid,
+        string pidx)
+    {
+        var order = await db.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .FirstOrDefaultAsync(o => o.Id == orderId);
+
+        if (order is null)
+        {
+            throw new Exception("Order not found");
+        }
+
+        var user = await db.Users
+            .FirstOrDefaultAsync(u => u.Id == order.UserId
+                                      && u.FirebaseUid == firebaseUid);
+
+        if (user is null) throw new UnauthorizedAccessException();
+
+        var khaltiResponse = await LookupPayment(
+            new KhaltiPaymentVerificationRequest
+            {
+                PIDX = pidx
+            });
+
+        if (khaltiResponse is null)
+        {
+            throw new Exception("Invalid Khalti response");
+        }
+
+        if (khaltiResponse.Status != "Completed")
+        {
+            throw new Exception(
+                $"Payment was not completed. Status: {khaltiResponse.Status}");
+        }
+
+        var expectedAmount = order.TotalPrice * 100;
+        if (expectedAmount != khaltiResponse.TotalAmount)
+        {
+            throw new Exception("Khalti payment amount does not match order amount");
+        }
+
+        order.PaymentStatus = "Paid";
+
+        order.PaymentId = khaltiResponse.TransactionId;
+
+        await db.SaveChangesAsync();
+
+        return new OrderResponse
+        {
+            Id = order.Id,
+            Address = order.Address,
+            Phone = order.Phone,
+            PaymentOption = order.PaymentOption,
+            DeliveryCharge = order.DeliveryCharge,
+            Discount = order.Discount,
+            Status = order.Status,
+            TotalPrice = order.TotalPrice,
+            VehicleNumber = order.VehicleNumber,
+            OrderDate = order.OrderDate,
+            OrderItems = order.OrderItems.Select(i => new OrderItemResponse
+            {
+                ProductId = i.ProductId,
+                ProductName = i.Product.Name,
+                Quantity = i.Quantity,
+                Price = i.Price
+            }).ToList()
+        };
     }
 }
