@@ -92,6 +92,33 @@ public class OrderController(
         }
     }
 
+    [HttpPatch("{id:int}/paymentStatus")]
+    public async Task<ActionResult<OrderResponse?>> UpdateOrderPaymentStatus(
+        [FromRoute] int id,
+        [FromBody] UpdateOrderPaymentStatusRequest request)
+    {
+        await Task.Delay(2000);
+
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        try
+        {
+            var updatedOrder = await orderService.UpdatePaymentStatus(
+                id: id,
+                firebaseUid: firebaseUid,
+                status: request.Status,
+                paymentId: request.PaymentId
+            );
+            if (updatedOrder is null) return NotFound();
+            return Ok(updatedOrder);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpPost("khalti/initiate/{id:int}")]
     public async Task<ActionResult<KhaltiPaymentResponse>> InitiateKhaltiPayment(
         [FromRoute] int id)
@@ -116,9 +143,11 @@ public class OrderController(
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Khalti Error: {Error}", ex.Message);
             return BadRequest(ex.Message);
         }
     }
+
 
     [HttpPost("khalti/verify")]
     public async Task<ActionResult<KhaltiVerificationResponse?>> VerifyKhaltiPayment(

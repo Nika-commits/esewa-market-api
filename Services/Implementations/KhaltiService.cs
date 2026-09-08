@@ -80,8 +80,7 @@ public class KhaltiService(
         var responseContent = await response.Content.ReadAsStringAsync();
         logger.LogInformation("Khalti response: {responseContent}", responseContent);
 
-        var responseJson = JsonConvert.SerializeObject(responseContent, Formatting.Indented);
-        var responseObject = JsonConvert.DeserializeObject<KhaltiPaymentResponse>(responseJson);
+        var responseObject = JsonConvert.DeserializeObject<KhaltiPaymentResponse>(responseContent);
         return responseObject;
     }
 

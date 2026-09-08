@@ -9,8 +9,7 @@ namespace esewa_market.Services.Implementations;
 
 public class OrderService(
     AppDbContext db,
-    IUserService userService,
-    IKhaltiService khaltiService
+    IUserService userService
 ) : IOrderService
 {
 
@@ -276,4 +275,55 @@ public class OrderService(
         };
     }
 
+    public async Task<OrderResponse?> UpdatePaymentStatus(int id, string firebaseUid, string status,
+        string paymentId)
+    {
+        var user = await userService.GetCurrentUser(firebaseUid);
+        if (user is null) throw new KeyNotFoundException("User Not Found");
+
+        var order = await db.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(ot => ot.Product)
+            .FirstOrDefaultAsync(o => o.Id == id && o.UserId == user.Id);
+
+        if (order is null) return null;
+
+        var allowedPaymentStatuses = new[]
+        {
+            "Pending",
+            "Paid",
+            "Refund"
+        };
+
+        var validStatus = allowedPaymentStatuses.FirstOrDefault(x => x.Equals(status, StringComparison
+            .OrdinalIgnoreCase));
+        if (validStatus is null) throw new ArgumentException("Invalid Payment Status");
+
+        order.PaymentStatus = validStatus;
+        order.PaymentId = paymentId;
+        await db.SaveChangesAsync();
+
+        return new OrderResponse
+        {
+            Id = order.Id,
+            Address = order.Address,
+            Phone = order.Phone,
+            PaymentOption = order.PaymentOption,
+            DeliveryCharge = order.DeliveryCharge,
+            Discount = order.Discount,
+            Status = validStatus,
+            TotalPrice = order.TotalPrice,
+            VehicleNumber = order.VehicleNumber,
+            OrderDate = order.OrderDate,
+            OrderItems = order.OrderItems.Select(i => new OrderItemResponse
+            {
+                ProductId = i.ProductId,
+                ProductName = i.Product.Name,
+                ProductImage = i.Product.ImageUrls.FirstOrDefault(),
+                Brand = i.Product.Brand,
+                Quantity = i.Quantity,
+                Price = i.Price
+            }).ToList()
+        };
+    }
 }

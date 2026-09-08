@@ -1,12 +1,14 @@
+using Newtonsoft.Json;
+
 namespace esewa_market.Data.Dto.Response;
 
 public class KhaltiPaymentResponse
 {
-    public string PIDX { get; set; } = "";
+    [JsonProperty("pidx")] public string Pidx { get; set; } = "";
 
-    public string PaymentUrl { get; set; } = "";
+    [JsonProperty("payment_url")] public string PaymentUrl { get; set; } = "";
 
-    public string ExpiresAt { get; set; } = "";
+    [JsonProperty("expires_at")] public string ExpiresAt { get; set; } = "";
 
-    public int ExpiresIn { get; set; }
+    [JsonProperty("expires_in")] public int ExpiresIn { get; set; }
 }

@@ -26,4 +26,11 @@ public interface IOrderService
         string firebaseUid,
         string status
     );
+
+    Task<OrderResponse?> UpdatePaymentStatus(
+        int id,
+        string firebaseUid,
+        string status,
+        string paymentId
+    );
 }
