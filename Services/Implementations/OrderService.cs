@@ -10,7 +10,7 @@ namespace esewa_market.Services.Implementations;
 public class OrderService(
     AppDbContext db,
     IUserService userService,
-    IProductService productService
+    IKhaltiService khaltiService
 ) : IOrderService
 {
 
@@ -275,6 +275,5 @@ public class OrderService(
             }).ToList()
         };
     }
-
 
 }

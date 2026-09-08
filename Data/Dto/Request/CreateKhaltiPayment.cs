@@ -2,6 +2,10 @@ namespace esewa_market.Data.Dto.Request;
 
 public class CreateKhaltiPayment
 {
+    public string ReturnUrl { get; set; } = "";
+
+    public string WebsiteUrl { get; set; } = "";
+
     public int Amount { get; set; }
 
     public string PurchaseOrderId { get; set; }
@@ -10,11 +14,11 @@ public class CreateKhaltiPayment
 
     public CustomerInfo CustomerInfo { get; set; }
 
-    public List<AmountBreakdown> AmountBreakdown { get; set; } = [];
+    public List<AmountBreakdown>? AmountBreakdown { get; set; }
 
     public string? Label { get; set; }
 
-    public List<ProductDetails> ProductDetails { get; set; } = [];
+    public IEnumerable<ProductDetails> ProductDetails { get; set; }
 
     public string? MerchantUsername { get; set; }
 
@@ -32,6 +36,16 @@ public class CustomerInfo
 
 public class AmountBreakdown
 {
+    public AmountBreakdown()
+    {
+    }
+
+    public AmountBreakdown(int amount, string label)
+    {
+        Amount = amount;
+        Label = label;
+    }
+
     public string Label { get; set; }
 
     public int Amount { get; set; }

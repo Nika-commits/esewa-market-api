@@ -10,7 +10,8 @@ namespace esewa_market.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class OrderController(
-    IOrderService orderService
+    IOrderService orderService,
+    IKhaltiService khaltiService
 ) : ControllerBase
 {
     [HttpPost]
@@ -84,6 +85,49 @@ public class OrderController(
             return Ok(updatedOrder);
         }
         catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("khalti/initiate/{id:int}")]
+    public async Task<ActionResult<KhaltiPaymentResponse>> InitiateKhaltiPayment(
+        [FromRoute] int id)
+    {
+        var authorizationHeader = Request.Headers.Authorization.ToString();
+        if (string.IsNullOrWhiteSpace(authorizationHeader) ||
+            !authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        {
+            return Unauthorized();
+        }
+
+        try
+        {
+            var response = await khaltiService.InitiatePayment(
+                id,
+                authorizationHeader);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("khalti/verify")]
+    public async Task<ActionResult<KhaltiVerificationResponse?>> VerifyKhaltiPayment(
+        [FromQuery] string pidx)
+    {
+        try
+        {
+            var payload = new KhaltiPaymentVerificationRequest
+            {
+                PIDX = pidx
+            };
+            var response = await khaltiService.LookupPayment(payload);
+            return Ok(response);
+        }
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
