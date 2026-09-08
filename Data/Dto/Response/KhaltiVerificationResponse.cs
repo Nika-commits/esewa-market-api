@@ -4,7 +4,7 @@ public class KhaltiVerificationResponse
 {
     public string PIDX { get; set; } = "";
 
-    public string TotalAmount { get; set; } = "";
+    public int TotalAmount { get; set; }
 
     public string Status { get; set; } = "";
 

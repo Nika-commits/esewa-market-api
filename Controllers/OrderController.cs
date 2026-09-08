@@ -11,7 +11,8 @@ namespace esewa_market.Controllers;
 [ApiController]
 public class OrderController(
     IOrderService orderService,
-    IKhaltiService khaltiService
+    IKhaltiService khaltiService,
+    ILogger<OrderController> logger
 ) : ControllerBase
 {
     [HttpPost]
@@ -82,6 +83,7 @@ public class OrderController(
         {
             var updatedOrder = await orderService.UpdateOrderStatus(id, firebaseUid, request.Status);
             if (updatedOrder is null) return NotFound();
+            Console.WriteLine(updatedOrder);
             return Ok(updatedOrder);
         }
         catch (ArgumentException ex)
@@ -94,7 +96,9 @@ public class OrderController(
     public async Task<ActionResult<KhaltiPaymentResponse>> InitiateKhaltiPayment(
         [FromRoute] int id)
     {
+        await Task.Delay(2000);
         var authorizationHeader = Request.Headers.Authorization.ToString();
+        logger.LogInformation("Authorization Header: {AuthorizationHeader}", authorizationHeader);
         if (string.IsNullOrWhiteSpace(authorizationHeader) ||
             !authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
         {
@@ -103,9 +107,11 @@ public class OrderController(
 
         try
         {
+            var token = authorizationHeader["Bearer ".Length..].Trim();
             var response = await khaltiService.InitiatePayment(
                 id,
-                authorizationHeader);
+                token);
+            logger.LogInformation("Khalti response: {response}", response);
             return Ok(response);
         }
         catch (Exception ex)
@@ -118,6 +124,7 @@ public class OrderController(
     public async Task<ActionResult<KhaltiVerificationResponse?>> VerifyKhaltiPayment(
         [FromQuery] string pidx)
     {
+        await Task.Delay(2000);
         try
         {
             var payload = new KhaltiPaymentVerificationRequest

@@ -1,66 +1,69 @@
+using Newtonsoft.Json;
+
 namespace esewa_market.Data.Dto.Request;
 
 public class CreateKhaltiPayment
 {
-    public string ReturnUrl { get; set; } = "";
+    [JsonProperty("return_url")] public string ReturnUrl { get; set; } = "";
 
-    public string WebsiteUrl { get; set; } = "";
+    [JsonProperty("website_url")] public string WebsiteUrl { get; set; } = "";
 
-    public int Amount { get; set; }
+    [JsonProperty("amount")] public int Amount { get; set; }
 
-    public string PurchaseOrderId { get; set; }
+    [JsonProperty("purchase_order_id")] public string PurchaseOrderId { get; set; }
 
-    public string PurchaseOrderName { get; set; }
+    [JsonProperty("purchase_order_name")] public string PurchaseOrderName { get; set; }
 
-    public CustomerInfo CustomerInfo { get; set; }
+    [JsonProperty("customer_info")] public CustomerInfo CustomerInfo { get; set; }
 
-    public List<AmountBreakdown>? AmountBreakdown { get; set; }
+    [JsonProperty("amount_breakdown")] public List<AmountBreakdown>? AmountBreakdown { get; set; }
 
-    public string? Label { get; set; }
+    [JsonProperty("label")] public string? Label { get; set; }
 
-    public IEnumerable<ProductDetails> ProductDetails { get; set; }
+    [JsonProperty("product_details")] public IEnumerable<ProductDetails> ProductDetails { get; set; }
 
-    public string? MerchantUsername { get; set; }
+    [JsonProperty("merchant_username")] public string? MerchantUsername { get; set; }
 
-    public string? MerchantExtra { get; set; }
+    [JsonProperty("merchant_extra")] public string? MerchantExtra { get; set; }
 }
 
 public class CustomerInfo
 {
-    public string Name { get; set; }
+    [JsonProperty(PropertyName = "name")] public string Name { get; set; }
 
-    public string Email { get; set; }
+    [JsonProperty(PropertyName = "email")] public string Email { get; set; }
 
-    public string Phone { get; set; }
+    [JsonProperty(PropertyName = "phone")] public string? Phone { get; set; }
 }
 
 public class AmountBreakdown
 {
-    public AmountBreakdown()
-    {
-    }
-
     public AmountBreakdown(int amount, string label)
     {
         Amount = amount;
         Label = label;
     }
 
-    public string Label { get; set; }
+    [JsonProperty(PropertyName = "label")] public string Label { get; set; }
 
+    [JsonProperty(PropertyName = "amount")]
     public int Amount { get; set; }
 }
 
 public class ProductDetails
 {
+    [JsonProperty(PropertyName = "identity")]
     public string Identity { get; set; }
 
-    public string Name { get; set; }
+    [JsonProperty(PropertyName = "name")] public string Name { get; set; }
 
+    [JsonProperty(PropertyName = "total_price")]
     public int TotalPrice { get; set; }
 
+    [JsonProperty(PropertyName = "quantity")]
     public int Quantity { get; set; }
 
+    [JsonProperty(PropertyName = "unit_price")]
     public int UnitPrice { get; set; }
 }
 
