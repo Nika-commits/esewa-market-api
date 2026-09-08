@@ -124,14 +124,8 @@ public class OrderController(
         [FromRoute] int id)
     {
         await Task.Delay(2000);
-        var authorizationHeader = Request.Headers.Authorization.ToString();
-        logger.LogInformation("Authorization Header: {AuthorizationHeader}", authorizationHeader);
-        if (string.IsNullOrWhiteSpace(authorizationHeader) ||
-            !authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-        {
-            return Unauthorized();
-        }
-
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
         try
         {
             var response = await khaltiService.InitiatePayment(
