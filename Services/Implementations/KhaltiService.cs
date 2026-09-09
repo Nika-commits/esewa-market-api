@@ -19,7 +19,7 @@ public class KhaltiService(
     private const string InitiateUrl = "epayment/initiate/";
     private const string LookupUrl = "epayment/lookup/";
 
-    private string _khaltiPublicKey = configuration["Khalti:PublicKey"] ?? throw new
+    private readonly string _khaltiPublicKey = configuration["Khalti:PublicKey"] ?? throw new
         InvalidOperationException("Khalti Secret Key not configured");
 
     private readonly string _khaltiSecretKey = configuration["Khalti:SecretKey"] ??
@@ -91,11 +91,13 @@ public class KhaltiService(
     public async Task<KhaltiVerificationResponse?> LookupPayment(KhaltiPaymentVerificationRequest request)
     {
         var jsonPayload = JsonConvert.SerializeObject(request);
-        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+        var content = new StringContent(
+            jsonPayload,
+            Encoding.UTF8,
+            "application/json");
 
         var client = new HttpClient();
-        client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Key", _khaltiSecretKey);
+        client.DefaultRequestHeaders.Add("Authorization", $"Key {_khaltiSecretKey}");
 
         var response = await client.PostAsync(KhaltiUrl + LookupUrl, content);
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -133,11 +135,10 @@ public class KhaltiService(
 
         if (user is null) throw new UnauthorizedAccessException();
 
-        var khaltiResponse = await LookupPayment(
-            new KhaltiPaymentVerificationRequest
-            {
-                PIDX = pidx
-            });
+        var khaltiResponse = await LookupPayment(new KhaltiPaymentVerificationRequest
+        {
+            PIDX = pidx,
+        });
 
         if (khaltiResponse is null)
         {
@@ -157,8 +158,8 @@ public class KhaltiService(
         }
 
         order.PaymentStatus = "Paid";
-
         order.PaymentId = khaltiResponse.TransactionId;
+        order.Status = "Pending";
 
         await db.SaveChangesAsync();
 
@@ -174,13 +175,16 @@ public class KhaltiService(
             TotalPrice = order.TotalPrice,
             VehicleNumber = order.VehicleNumber,
             OrderDate = order.OrderDate,
-            OrderItems = order.OrderItems.Select(i => new OrderItemResponse
-            {
-                ProductId = i.ProductId,
-                ProductName = i.Product.Name,
-                Quantity = i.Quantity,
-                Price = i.Price
-            }).ToList()
+            OrderItems =
+            [
+                .. order.OrderItems.Select(i => new OrderItemResponse
+                {
+                    ProductId = i.ProductId,
+                    ProductName = i.Product.Name,
+                    Quantity = i.Quantity,
+                    Price = i.Price
+                })
+            ]
         };
     }
 }
