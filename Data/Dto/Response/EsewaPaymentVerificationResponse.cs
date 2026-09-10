@@ -10,12 +10,21 @@ public class EsewaPaymentVerificationResponse
 
     public string Code { get; set; } = "";
 
+    public required Message Message { get; set; }
+
     public required TransactionDetails TransactionDetails { get; set; }
 
     public string MerchantName { get; set; } = "";
 }
 
-public abstract class TransactionDetails
+public class Message
+{
+    public string TechnicalSuccessMessage { get; set; } = "";
+
+    public string SuccessMessage { get; set; } = "";
+}
+
+public class TransactionDetails
 {
     public string TransactionId { get; set; } = "";
 

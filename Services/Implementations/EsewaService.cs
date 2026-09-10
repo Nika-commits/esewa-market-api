@@ -46,7 +46,10 @@ public class EsewaService(
             );
         }
 
-        return JsonConvert.DeserializeObject<EsewaPaymentVerificationResponse>(responseContent);
+        var verificationList = JsonConvert.DeserializeObject<List<EsewaPaymentVerificationResponse>>
+            (responseContent);
+
+        return verificationList?.FirstOrDefault();
     }
 
     public async Task<OrderResponse?> VerifyEsewaPayment(int orderId, string refId, string firebaseUid)
