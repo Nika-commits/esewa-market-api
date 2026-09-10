@@ -117,37 +117,42 @@ public class OrderService(
         };
     }
 
-    async Task<OrderResponse?> IOrderService.GetOrderById(int id, string firebaseUid)
+    public async Task<OrderResponse?> GetOrderById(int id, string firebaseUid)
     {
         var user = await userService.GetCurrentUser(firebaseUid);
         if (user is null) throw new KeyNotFoundException("User not found");
 
-        return await db.Orders
-            .AsNoTracking()
-            .Where(o => o.Id == id && o.UserId == user.Id)
-            .Select(o => new OrderResponse
-            {
-                Id = o.Id,
-                Address = o.Address,
-                Phone = o.Phone,
-                PaymentOption = o.PaymentOption,
-                VehicleNumber = o.VehicleNumber,
-                DeliveryCharge = o.DeliveryCharge,
-                Discount = o.Discount,
-                Status = o.Status,
-                TotalPrice = o.TotalPrice,
-                OrderDate = o.OrderDate,
-                OrderItems = o.OrderItems.Select(i => new OrderItemResponse
+        var order = await db.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .FirstOrDefaultAsync(o => o.Id == id && o.UserId == user.Id);
+
+        if (order is null) return null;
+
+        return new OrderResponse
+        {
+            Id = order.Id,
+            Address = order.Address,
+            Phone = order.Phone,
+            PaymentOption = order.PaymentOption,
+            DeliveryCharge = order.DeliveryCharge,
+            Discount = order.Discount,
+            Status = order.Status,
+            TotalPrice = order.TotalPrice,
+            VehicleNumber = order.VehicleNumber,
+            OrderDate = order.OrderDate,
+            OrderItems =
+            [
+                .. order.OrderItems.Select(i => new OrderItemResponse
                 {
                     ProductId = i.ProductId,
                     ProductName = i.Product.Name,
                     Quantity = i.Quantity,
                     Price = i.Price
-                }).ToList()
-            })
-            .FirstOrDefaultAsync();
+                })
+            ]
+        };
     }
-
 
     public async Task<List<OrderResponse>> GetOrdersByUserId(
         OrderFilterRequest filter,

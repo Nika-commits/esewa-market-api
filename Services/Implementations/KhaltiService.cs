@@ -31,8 +31,11 @@ public class KhaltiService(
     {
         logger.LogInformation("Initiating Khalti payment for order {orderId}", orderId);
         var order = await db.Orders
-            .Where(o => o.Id == orderId).Include(order => order.OrderItems)
+            .Where(o => o.Id == orderId)
+            .Include(order => order.OrderItems)
+            .ThenInclude(oi => oi.Product)
             .FirstOrDefaultAsync();
+
         if (order is null) throw new Exception("Order not found");
         var user = await db.Users
             .Where(u => u.Id == order.UserId)
