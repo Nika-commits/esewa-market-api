@@ -12,6 +12,7 @@ namespace esewa_market.Controllers;
 public class OrderController(
     IOrderService orderService,
     IKhaltiService khaltiService,
+    IEsewaService esewaService,
     ILogger<OrderController> logger
 ) : ControllerBase
 {
@@ -167,6 +168,29 @@ public class OrderController(
                 "Khalti payment verification failed for order {OrderId}",
                 id
             );
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("esewa/verify/{id:int}")]
+    public async Task<ActionResult<OrderResponse?>> VerifyEsewaPayment(
+        [FromRoute] int id,
+        [FromQuery] string refId)
+    {
+        await Task.Delay(2000);
+        var firebaseUid = await GetFirebaseUid();
+        if (firebaseUid is null) return Unauthorized();
+
+        try
+        {
+            var response = await esewaService.VerifyEsewaPayment(id, refId, firebaseUid);
+            if (response is null) return BadRequest("Payment Verification Failed");
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Esewa payment verification failed for order {OrderId} and refId " +
+                                "{refId}", id, refId);
             return BadRequest(ex.Message);
         }
     }

@@ -9,8 +9,7 @@ namespace esewa_market.Services.Implementations;
 
 public class EsewaService(
     AppDbContext db,
-    UserService userService,
-    OrderService orderService,
+    IUserService userService,
     IConfiguration configuration,
     ILogger<EsewaService> logger
 ) : IEsewaService
@@ -71,9 +70,13 @@ public class EsewaService(
             throw new Exception("Esewa " +
                                 "payment verification failed");
 
-        double totalAmount = order.TotalPrice;
-        if (totalAmount.ToString(CultureInfo.InvariantCulture) != verificationResponse.TotalAmount)
+        decimal totalAmount = order.TotalPrice;
+
+        if (totalAmount != decimal.Parse(
+                verificationResponse.TotalAmount, CultureInfo.InvariantCulture))
+        {
             throw new Exception("Esewa payment amount does not match order amount");
+        }
 
         order.PaymentStatus = "Paid";
         order.PaymentId = verificationResponse.TransactionDetails.TransactionId;

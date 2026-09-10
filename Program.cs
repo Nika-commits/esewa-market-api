@@ -35,6 +35,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IKhaltiService, KhaltiService>();
+builder.Services.AddScoped<IEsewaService, EsewaService>();
 
 var app = builder.Build();
 
