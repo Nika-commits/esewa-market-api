@@ -5,12 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace esewa_market.Services.Implementations;
 
-public class ProductService(AppDbContext db) : IProductService
+public class ProductService(
+    AppDbContext db,
+    ILogger<ProductService> logger) : IProductService
 {
 
     public async Task<List<Product>> GetProducts(string? category, string? search, int page, int pageSize)
     {
         IQueryable<Product> products = db.Products;
+
+        logger.LogInformation(
+            "Getting products with category: {category}, search: {search}, page: {page}, pageSize: {pageSize}",
+            category, search, page, pageSize);
 
         if (!string.IsNullOrWhiteSpace(category) && category == "featured")
         {
@@ -39,11 +45,12 @@ public class ProductService(AppDbContext db) : IProductService
 
     public async Task<List<string>> GetSearchSuggestions(string query)
     {
+        logger.LogInformation("Searching for products with query: {query}", query);
         return await db.Products
             .Where(p => EF.Functions.ILike(p.Name, $"%{query}%"))
             .OrderBy(p => p.Name)
             .Select(p => p.Name)
-            .Take(10)
+            .Take(15)
             .ToListAsync();
     }
 }
