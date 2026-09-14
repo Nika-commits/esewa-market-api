@@ -1,4 +1,5 @@
 using esewa_market.Data.Entities;
+using esewa_market.Data.Enums;
 using esewa_market.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +16,12 @@ public class ProductController(
         [FromQuery] string? category,
         [FromQuery] string? search,
         [FromQuery] int page = 0,
-        [FromQuery] int pageSize = 4
+        [FromQuery] int pageSize = 4,
+        [FromQuery] PriceFilter priceFilter = PriceFilter.BestSellers
     )
     {
         await Task.Delay(2000);
-        return Ok(await productService.GetProducts(category, search, page, pageSize));
+        return Ok(await productService.GetProducts(category, search, priceFilter, page, pageSize));
     }
 
     [HttpGet("{id:int}")]

@@ -1,5 +1,6 @@
 using esewa_market.Data;
 using esewa_market.Data.Entities;
+using esewa_market.Data.Enums;
 using esewa_market.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,13 +11,16 @@ public class ProductService(
     ILogger<ProductService> logger) : IProductService
 {
 
-    public async Task<List<Product>> GetProducts(string? category, string? search, int page, int pageSize)
+    public async Task<List<Product>> GetProducts(string? category, string? search,
+        PriceFilter priceFilter, int page, int pageSize)
     {
         IQueryable<Product> products = db.Products;
 
         logger.LogInformation(
-            "Getting products with category: {category}, search: {search}, page: {page}, pageSize: {pageSize}",
-            category, search, page, pageSize);
+            "Getting products with category: {category}, search: {search}, filter: {priceFilter} page: " +
+            "{page}," +
+            " pageSize: {pageSize}",
+            category, search, priceFilter, page, pageSize);
 
         if (!string.IsNullOrWhiteSpace(category) && category == "featured")
         {
@@ -30,11 +34,19 @@ public class ProductService(
                 EF.Functions.ILike(p.Description, $"%{search}%"));
         }
 
+        products = priceFilter switch
+        {
+            PriceFilter.BestSellers => products.OrderBy(p => p.Name),
+            PriceFilter.PriceHighToLow => products.OrderByDescending(p => p.Price),
+            PriceFilter.PriceLowToHigh => products.OrderBy(p => p.Price),
+            _ => products.OrderBy(p => p.Id)
+        };
+
         return await products
-            .OrderBy(p => p.Id)
             .Skip(page * pageSize)
             .Take(pageSize)
             .ToListAsync();
+        throw new NotImplementedException();
     }
 
     public async Task<Product?> GetProductById(int id)
