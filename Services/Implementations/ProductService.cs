@@ -46,7 +46,6 @@ public class ProductService(
             .Skip(page * pageSize)
             .Take(pageSize)
             .ToListAsync();
-        throw new NotImplementedException();
     }
 
     public async Task<Product?> GetProductById(int id)
