@@ -24,6 +24,13 @@ public class ProductController(
         return Ok(await productService.GetProducts(category, search, priceFilter, page, pageSize));
     }
 
+    [HttpGet("popular-search")]
+    public async Task<ActionResult<List<Product>>> GetPopularSearchProducts()
+    {
+        await Task.Delay(2000);
+        return Ok(await productService.GetProducts(null, null, PriceFilter.BestSellers, 4, 3));
+    }
+
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Product?>> GetProductById(
         [FromRoute] int id
